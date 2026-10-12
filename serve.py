@@ -2,7 +2,7 @@
 """Local test server for dist/ – mimics vercel.json (headers + host routing).
 Subdomains are simulated via ports:  python3 serve.py
   http://127.0.0.1:8810/  → /hub/, /scan/ … (like preview deployments)
-  http://127.0.0.1:8811/ … 8820/  → scan, voice, image, video, translate, qr, pdf, hub, blockchaindemo, safe (like <app>.cmventures.xyz)
+  http://127.0.0.1:8811/ … 8821/  → scan, voice, image, video, translate, qr, pdf, hub, blockchaindemo, safe, time (like <app>.cmventures.xyz)
 Every request is logged; a POST or any non-file request would show up here."""
 import http.server
 import json
@@ -14,7 +14,7 @@ import threading
 HERE = os.path.dirname(os.path.abspath(__file__))
 DIST = os.path.join(HERE, "dist")
 CFG = json.load(open(os.path.join(HERE, "vercel.json")))
-PORTS = {8810: None, 8811: "scan", 8812: "voice", 8813: "image", 8814: "video", 8815: "translate", 8816: "qr", 8817: "pdf", 8818: "hub", 8819: "blockchaindemo", 8820: "safe"}
+PORTS = {8810: None, 8811: "scan", 8812: "voice", 8813: "image", 8814: "video", 8815: "translate", 8816: "qr", 8817: "pdf", 8818: "hub", 8819: "blockchaindemo", 8820: "safe", 8821: "time"}
 
 
 def headers_for(path, app):

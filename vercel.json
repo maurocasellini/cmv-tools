@@ -175,7 +175,7 @@
       "missing": [
         {
           "type": "host",
-          "value": "(tools|pdf|scan|voice|blockchaindemo|image|video|translate|qr|safe)\\.cmventures\\.xyz"
+          "value": "(tools|pdf|scan|voice|blockchaindemo|image|video|translate|qr|safe|time)\\.cmventures\\.xyz"
         }
       ],
       "destination": "/hub/",
@@ -382,6 +382,26 @@
         }
       ],
       "destination": "/safe/:path*"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "time.cmventures.xyz"
+        }
+      ],
+      "destination": "/time/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "time.cmventures.xyz"
+        }
+      ],
+      "destination": "/time/:path*"
     }
   ]
 }

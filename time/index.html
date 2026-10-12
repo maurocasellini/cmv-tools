@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Time Zones</title>
+<meta name="description" content="Mehrere Zeitzonen vergleichen und Meetings planen – mit Sommer- und Winterzeit, direkt im Browser.">
+<meta name="theme-color" content="#242b41">
+<script src="shared/theme.js"></script>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="shared/fonts/fonts.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="time.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="cmv-home" href="https://cmventures.xyz/" title="CM Ventures" aria-label="CM Ventures – Startseite"><img class="cmv-logo on-light" src="shared/brand/cmv-logo.svg" alt="CM Ventures" width="131" height="30"><img class="cmv-logo on-dark" src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="131" height="30"></a>
+  <a class="brand" href="./">
+    <img class="logo-img" src="logo.svg" alt="" width="30" height="30"><span class="logo-word"><b>Time</b> <em>Zones</em></span>
+  </a>
+  <span class="local-badge" title="Alles läuft auf deinem Gerät. Nichts wird gesendet.">Kein Upload</span>
+  <div class="spacer"></div>
+  <a class="all-tools" data-tool-link="hub">Alle Tools</a>
+  <div class="lang-switch" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de">DE</button><button type="button" data-lang="en">EN</button></div>
+</header>
+
+<main>
+  <section id="home" class="view">
+    <div class="hero slim">
+      <div class="eyebrow accent">Zeitzonen</div>
+      <h1>Wie spät ist es dort – <em>und wann passt es allen</em>?</h1>
+      <p>Orte hinzufügen, Datum und Uhrzeit wählen: Du siehst sofort die Zeit an jedem Ort – mit Sommer- und Winterzeit für genau dieses Datum – und welche Stunden für alle in die Arbeitszeit fallen.</p>
+    </div>
+
+    <div class="controls">
+      <label class="field"><span>Datum</span>
+        <div class="date-row">
+          <button type="button" class="btn small" data-shift="-1" title="Tag zurück" aria-label="Tag zurück">‹</button>
+          <input id="date" type="date">
+          <button type="button" class="btn small" data-shift="1" title="Tag vor" aria-label="Tag vor">›</button>
+        </div>
+      </label>
+      <label class="field"><span>Uhrzeit in <b id="home-name" data-no-i18n></b></span><input id="time" type="time" step="300"></label>
+      <button type="button" id="now" class="btn">Jetzt</button>
+      <div class="field add"><span>Ort oder Zeitzone hinzufügen</span>
+        <div class="search">
+          <input id="q" type="search" placeholder="z. B. Tokio, New York, Indien, UTC …" autocomplete="off" spellcheck="false">
+          <ul id="sug" class="sug" hidden></ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="zones" class="zones"></div>
+
+    <div class="tl-wrap">
+      <div class="tl-head"><span class="label">24 Stunden im Vergleich</span><span class="legend"><i class="work"></i>Arbeitszeit <i class="edge"></i>Randzeit <i class="night"></i>Nacht</span></div>
+      <div id="timeline" class="timeline"></div>
+      <p id="overlap" class="note"></p>
+    </div>
+
+    <div class="share">
+      <button type="button" id="copy" class="btn">Zeiten kopieren</button>
+      <button type="button" id="link" class="btn">Link teilen</button>
+      <div class="ics">
+        <input id="title" type="text" placeholder="Titel, z. B. Call mit Team Asien" data-no-i18n>
+        <select id="dur" aria-label="Dauer"><option value="30">30 Min.</option><option value="60" selected>1 Std.</option><option value="90">1,5 Std.</option><option value="120">2 Std.</option></select>
+        <button type="button" id="ics" class="btn primary">Kalender-Termin (.ics)</button>
+      </div>
+    </div>
+
+  <div class="how" id="how">
+    <div class="how-head">So funktioniert’s</div>
+    <h2>Zeitzonen ohne Kopfrechnen.</h2>
+    <div class="how-grid">
+      <div class="how-card"><span class="n">01</span><h3>Die Regeln kennt dein Browser</h3><p>Jeder Browser enthält die offizielle Zeitzonen-Datenbank (IANA) – mit allen Sommer- und Winterzeit-Regeln der Welt. Dieses Tool fragt sie für das gewählte Datum ab. Es wird nichts geladen und nichts gesendet.</p></div>
+      <div class="how-card"><span class="n">02</span><h3>Sommerzeit für das richtige Datum</h3><p>Europa, die USA und Australien stellen an verschiedenen Tagen um – manche Länder gar nicht. Deshalb zählt das Datum: Im März und im Oktober verschiebt sich der Abstand zu New York für ein paar Wochen um eine Stunde.</p></div>
+      <div class="how-card"><span class="n">03</span><h3>Termin direkt in den Kalender</h3><p>Stunde in der Zeitleiste antippen, Zeiten kopieren oder als Kalender-Datei (.ics) speichern. Jeder Kalender zeigt den Termin dann automatisch in der eigenen Ortszeit an.</p></div>
+    </div>
+    <p class="how-note">Deine Orte werden nur in diesem Browser gespeichert, damit sie beim nächsten Besuch wieder da sind. Ein geteilter Link enthält nur die Orte und die Uhrzeit.</p>
+  </div>
+  </section>
+
+  <section id="about" class="view hidden legal">
+    <a class="back" href="#">← Zurück</a>
+    <h2>Hinweise zum Tool</h2>
+    <p>Die Zeitzonen-Umrechnung läuft vollständig in deinem Browser über dessen eingebaute Zeitzonen-Datenbank (Intl API). Es werden keine Daten gesendet – die Seite darf technisch keine Verbindung zu anderen Servern aufbauen (Content Security Policy).</p>
+    <h3>Genauigkeit</h3>
+    <p>Die Regeln stammen aus der IANA-Zeitzonen-Datenbank, die mit dem Browser aktualisiert wird. Kurzfristige Gesetzesänderungen einzelner Länder kommen mit dem nächsten Browser-Update.</p>
+    <h3>Speicher</h3>
+    <p>Die Liste deiner Orte wird nur lokal in diesem Browser gespeichert (localStorage).</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <span class="foot-id"><a class="foot-brand" href="https://cmventures.xyz/" target="_blank" rel="noopener noreferrer"><img src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="92" height="21"></a><span>Time Zones</span></span>
+  <nav class="foot-links">
+    <a href="https://cmventures.xyz/data-protection.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+    <a href="https://cmventures.xyz/" target="_blank" rel="noopener noreferrer">Impressum</a>
+    <a href="#about">Hinweise zum Tool</a>
+    <a href="https://github.com/maurocasellini/cmv-tools/tree/master/time" target="_blank" rel="noopener noreferrer">Quellcode</a>
+    <a data-tool-link="hub" data-hash="#licenses">Open-Source-Lizenzen</a>
+  </nav>
+</footer>
+
+<script src="i18n-en.js"></script>
+<script src="shared/i18n.js"></script>
+<script src="shared/common.js"></script>
+<script src="cities.js"></script>
+<script src="time.js"></script>
+</body>
+</html>

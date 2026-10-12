@@ -1,7 +1,7 @@
 /* Hub: routing for the “about” page + offline support */
 (() => {
   const TOOL = { all: 'Alle Tools', pdf: 'PDF Toolkit', scan: 'Doc Scanner', voice: 'Voice to Text', image: 'Bild-Toolkit',
-    video: 'Video-Toolkit', translate: 'Übersetzer', qr: 'QR-Codes', safe: 'File Safe' };
+    video: 'Video-Toolkit', translate: 'Übersetzer', qr: 'QR-Codes', safe: 'File Safe', time: 'Time Zones' };
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   let licenses = null;
   async function renderLicenses() {
