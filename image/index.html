@@ -39,6 +39,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.6"/></svg>
           Bilder wählen
         </label>
+        <a class="btn" href="#redact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16"/><path d="M6 9h8M6 13h5" /><rect x="13" y="11.5" width="6" height="3" fill="currentColor" stroke="none"/></svg>
+          Screenshot schwärzen
+        </a>
       </div>
       <ul class="facts">
         <li>HEIC, JPG, PNG, WebP, AVIF, GIF</li>
@@ -135,6 +139,49 @@
     </div>
   </section>
 
+  <section id="redact" class="view hidden">
+    <div class="rd-head">
+      <div>
+        <a class="back" href="#">← Bild-Toolkit</a>
+        <div class="eyebrow accent">Screenshot schwärzen</div>
+        <h2>Namen, Nummern, Adressen – <em>weg, bevor du teilst</em>.</h2>
+        <p class="muted">Screenshot oder Foto laden (auch mit <kbd>⌘V</kbd> / <kbd>Strg+V</kbd> einfügen) und über alles ziehen, was niemand sehen soll. Gespeichert wird ein neues Bild – ohne Metadaten, die Abdeckung lässt sich nicht entfernen.</p>
+      </div>
+    </div>
+    <div id="rd-empty" class="rd-empty">
+      <label class="drop" id="rd-drop">
+        <input id="rd-file" type="file" accept="image/*,.heic,.heif" hidden>
+        <strong>Screenshot hierher ziehen</strong>
+        <span>oder <u>auswählen</u> – oder einfach einfügen</span>
+      </label>
+      <button type="button" id="rd-paste" class="btn hidden">Aus Zwischenablage einfügen</button>
+    </div>
+    <div id="rd-editor" class="rd-editor hidden">
+      <div class="rd-bar">
+        <div class="seg" id="rd-mode" role="radiogroup">
+          <button type="button" data-v="black" class="active">Schwarz</button>
+          <button type="button" data-v="white">Weiss</button>
+          <button type="button" data-v="pixel">Verpixeln</button>
+        </div>
+        <button type="button" id="rd-undo" class="btn small" disabled>↶ Rückgängig</button>
+        <button type="button" id="rd-clear" class="btn small" disabled>Alle entfernen</button>
+        <button type="button" id="rd-new" class="btn small">Anderes Bild</button>
+      </div>
+      <p id="rd-hint" class="rd-hint">Über die Stelle ziehen, die verschwinden soll. Ein Feld antippen und ✕ wählen, um es wieder zu entfernen.</p>
+      <p id="rd-warn" class="rd-warn hidden">Achtung: Verpixelter Text lässt sich manchmal zurückrechnen. Für Namen, Nummern und Passwörter ist Schwarz die sichere Wahl.</p>
+      <div class="rd-stage" id="rd-stage">
+        <canvas id="rd-canvas"></canvas>
+        <svg id="rd-svg" class="rd-svg"></svg>
+      </div>
+      <div class="rd-out">
+        <span id="rd-count" class="muted"></span>
+        <button type="button" id="rd-copy" class="btn">Kopieren</button>
+        <button type="button" id="rd-share" class="btn hidden">Teilen</button>
+        <button type="button" id="rd-dl" class="btn primary">Als PNG speichern</button>
+      </div>
+    </div>
+  </section>
+
   <section id="about" class="view hidden legal">
     <a class="back" href="#">← Zurück</a>
     <h2>Hinweise zum Tool</h2>
@@ -191,5 +238,6 @@
 <script src="shared/zip.js"></script>
 <script src="vendor/exifr.umd.js" defer></script>
 <script src="image.js" defer></script>
+<script src="redact.js" defer></script>
 </body>
 </html>

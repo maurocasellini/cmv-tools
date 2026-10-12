@@ -68,3 +68,30 @@ input[type=color] { width: 100%; height: 38px; padding: 2px; border: 1px solid v
 .faced .cmp-bar .spacer { flex: 1; }
 .faced .cmp-bar .primary { color: #fff; }
 @media (max-width: 640px) { .fe-hint { font-size: 13px; } .fe-stage { padding: 0 8px; } }
+
+/* Screenshot redaction */
+.rd-head { padding: 32px 0 14px; max-width: 760px; }
+.rd-head h2 { font-size: clamp(28px, 4vw, 42px); margin: 8px 0 10px; line-height: 1.12; }
+.rd-head p { margin: 0; }
+.rd-head kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--line); padding: 1px 5px; background: var(--panel); }
+.rd-empty { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.rd-empty .drop { width: 100%; box-sizing: border-box; margin-top: 8px; }
+.rd-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px; background: var(--panel); border: 1px solid var(--line); }
+.rd-bar .seg { margin-right: auto; }
+.rd-hint { margin: 10px 0; font-size: 14px; color: var(--muted); }
+.rd-warn { margin: 10px 0; font-size: 14px; padding: 8px 12px; border-left: 3px solid #c4a245; background: var(--panel); }
+.rd-stage { position: relative; width: fit-content; max-width: 100%; margin: 0 auto; touch-action: none; user-select: none; -webkit-user-select: none; cursor: crosshair;
+  background: repeating-conic-gradient(var(--sand) 0% 25%, var(--panel) 0% 50%) 50% / 16px 16px; border: 1px solid var(--line); }
+#rd-canvas { display: block; max-width: 100%; max-height: 72vh; width: auto; height: auto; }
+.rd-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.rd-box rect { fill: none; stroke: #c47d45; stroke-dasharray: 6 4; }
+.rd-x { cursor: pointer; }
+.rd-x circle { fill: #c47d45; } .rd-x path { stroke: #fff; }
+.rd-draft { fill: rgba(0, 0, 0, .55); stroke: #c47d45; }
+.rd-draft.white { fill: rgba(255, 255, 255, .7); } .rd-draft.pixel { fill: rgba(196, 125, 69, .35); }
+.rd-out { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-end; margin-top: 14px; }
+.rd-out #rd-count { margin-right: auto; font-size: 14px; }
+@media (max-width: 640px) { .rd-out .btn { flex: 1; } .rd-out #rd-count { flex-basis: 100%; } .rd-bar .seg { flex-basis: 100%; margin: 0; } .rd-bar .seg button { flex: 1; } }
+.rd-hint, .rd-warn { box-sizing: border-box; min-height: 48px; }
+@media (max-width: 640px) { .rd-hint, .rd-warn { min-height: 86px; } }
+@media (max-width: 640px) { .rd-bar .btn { flex: 1; padding: 9px 4px; font-size: 10.5px; letter-spacing: .06em; } }

@@ -100,14 +100,16 @@
   const drop = $('#drop');
   ['dragenter', 'dragover'].forEach((ev) => document.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('over'); }));
   ['dragleave', 'drop'].forEach((ev) => document.addEventListener(ev, (e) => { e.preventDefault(); if (ev === 'drop' || !e.relatedTarget) drop.classList.remove('over'); }));
-  document.addEventListener('drop', (e) => { if (e.dataTransfer && e.dataTransfer.files.length) addFiles(e.dataTransfer.files); });
+  document.addEventListener('drop', (e) => { if (e.dataTransfer && e.dataTransfer.files.length && $('#redact').classList.contains('hidden')) addFiles(e.dataTransfer.files); });
 
   // ---------------------------------------------------------------- Views
   function show(id) {
-    for (const v of ['start', 'work', 'about']) $('#' + v).classList.toggle('hidden', v !== id);
+    for (const v of ['start', 'work', 'about', 'redact']) $('#' + v).classList.toggle('hidden', v !== id);
   }
   function route() {
-    if (location.hash === '#about') { show('about'); window.scrollTo(0, 0); } else show(items.length ? 'work' : 'start');
+    if (location.hash === '#about') { show('about'); window.scrollTo(0, 0); }
+    else if (location.hash === '#redact' || location.hash === '#schwaerzen') { show('redact'); window.scrollTo(0, 0); }
+    else show(items.length ? 'work' : 'start');
   }
   window.addEventListener('hashchange', route);
 
