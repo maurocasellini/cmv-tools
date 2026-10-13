@@ -33,9 +33,23 @@
   const uni = (a, b) => a + (b - a) * R();
   const pick = (a) => a[Math.floor(R() * a.length)];
 
-  /* ---------------- time: 4,200 blocks from 2011 to 2024 ---------------- */
+  /* ---------------- time: the real Bitcoin chain from the genesis block (2009) to the end of 2024 ----------------
+     Block heights, dates and rewards follow the real chain. The simulation runs in 4,200 time slices and places
+     every modelled transaction in the real block that was mined at its time; the chain itself holds far more. */
+  const HEIGHTS = [[0, '2009-01-03T18:15'], [100000, '2010-12-29T11:57'], [210000, '2012-11-28T15:24'], [300000, '2014-05-10T04:43'],
+    [420000, '2016-07-09T16:46'], [500000, '2017-12-18T17:42'], [630000, '2020-05-11T19:23'], [700000, '2021-09-11T04:14'],
+    [800000, '2023-07-24T03:44'], [840000, '2024-04-20T00:09'], [877260, '2024-12-31T23:59']].map(([h, d]) => [h, Date.parse(d + 'Z')]);
+  const HEIGHT_END = 877260;
+  const heightAt = (ms) => {
+    for (let i = 1; i < HEIGHTS.length; i++) {
+      const [h1, t1] = HEIGHTS[i];
+      if (ms <= t1) { const [h0, t0] = HEIGHTS[i - 1]; return Math.round(h0 + (h1 - h0) * Math.max(0, ms - t0) / (t1 - t0)); }
+    }
+    return HEIGHT_END;
+  };
+  const rewardAt = (h) => (50 * SAT) / Math.pow(2, Math.floor(h / 210000));
   const BLOCKS = 4200;
-  const T0 = Date.UTC(2011, 0, 3), T1 = Date.UTC(2024, 11, 31);
+  const T0 = HEIGHTS[0][1], T1 = HEIGHTS[HEIGHTS.length - 1][1];
   const SPAN = (T1 - T0) / (BLOCKS - 1);
   const yb = (y) => {
     const yr = Math.floor(y);
@@ -44,13 +58,7 @@
   };
   const dateOf = (ms) => new Date(ms).toISOString().slice(0, 10);
   const dtOf = (ms) => new Date(ms).toISOString().slice(0, 16).replace('T', ' ');
-  const reward = (b) => {
-    const ms = T0 + b * SPAN;
-    if (ms < Date.UTC(2012, 10, 28)) return 50 * SAT;
-    if (ms < Date.UTC(2016, 6, 9)) return 25 * SAT;
-    if (ms < Date.UTC(2020, 4, 11)) return 12.5 * SAT;
-    return 6.25 * SAT;
-  };
+  const reward = (b) => rewardAt(heightAt(T0 + b * SPAN));
   const duration = (ms) => {
     const d = ms / 864e5;
     const unit = (n, w) => nf(n) + ' ' + w + (Math.round(n) === 1 ? '' : 's');
@@ -74,6 +82,7 @@
     exchange: { label: 'Regulated exchange', sev: 0, color: '#2f62a8' },
     mining: { label: 'Mining pool', sev: 0, color: '#3d7a63' },
     merchant: { label: 'Merchant services', sev: 0, color: '#3a8a9a' },
+    mined: { label: 'Newly mined (solo miner)', sev: 0, color: '#3d7a63' },
     unknown: { label: 'Not attributed', sev: 0, color: '#9aa0ad' },
   };
   // real = historical, publicly reported service (seized, sanctioned or convicted). All addresses and flows are invented.
@@ -217,7 +226,7 @@
   }
   const at = (b, fn) => { if (b < BLOCKS) (sched[b] || (sched[b] = [])).push(fn); };
   const active = (ow, b) => { const e = ENT[owners[ow].ent]; return b >= e.b0 && b <= e.b1; };
-  const yearOf = (b) => 2011 + (T0 + b * SPAN - Date.UTC(2011, 0, 1)) / (365.25 * 864e5);
+  const yearOf = (b) => 2009 + (T0 + b * SPAN - Date.UTC(2009, 0, 1)) / (365.25 * 864e5);
 
   /* ---------------- economic behaviour ---------------- */
   const randUser = () => USERS[ri(USERS.length)];
@@ -500,8 +509,8 @@
     if (full()) return;
     const y = yearOf(b);
     // new coins: the coinbase transaction pays the block reward to a pool
-    const pool = b < yb(2013.25) || rnd() < 0.55 ? E.summit : E.glacier;
-    mkTx([], [[entAddr(pool), reward(b)]]);
+    if (b < yb(2011.0)) mkTx([], [[userAddr(pick(MINERS), 0.9), reward(b)]]);
+    else mkTx([], [[entAddr(b < yb(2013.25) || rnd() < 0.55 ? E.summit : E.glacier), reward(b)]]);
     for (const pl of [E.summit, E.glacier]) {
       const O = owners[pl];
       if (O.bal > 1.5 * reward(b)) {
@@ -627,7 +636,7 @@
     }
     return { src, small, nO, nW, nH, nP };
   }
-  const catOfKey = (k) => (typeof k === 'number' ? ENT[k].cat : 'unknown');
+  const catOfKey = (k) => (typeof k === 'number' ? ENT[k].cat : k === 'minted' ? 'mined' : 'unknown');
   function pathOf(tr, i) {
     const nodes = [];
     while (i >= 0) { nodes.push(i); i = tr.nP[i]; }
@@ -817,10 +826,10 @@
     $('ccMain').hidden = false;
     const alerts = screened.filter((s) => s.score >= 30).length;
     $('ccStats').innerHTML = [
-      [nf(nTx), 'transactions'], [nf(BLOCKS), 'blocks, 2011–2024'], [nf(nAddr), 'addresses'], [nf(ENT.length), 'known services'],
+      [nf(nTx), 'transactions'], [nf(HEIGHT_END + 1), 'blocks, 2009–2024'], [nf(nAddr), 'addresses'], [nf(ENT.length), 'known services'],
       [nf(screened.length), 'deposits screened'], [nf(alerts), 'alerts (score ≥ 30)'],
     ].map(([n, l]) => `<div><strong class="num">${n}</strong><span>${l}</span></div>`).join('');
-    $('ccBuilt').textContent = `Chain built in ${nf(genMs / 1000, 1)} s, ${nf(screened.length)} deposits screened in ${nf(screenTime / 1000, 1)} s. Everything runs in this browser.`;
+    $('ccBuilt').textContent = `Block heights, dates and block rewards follow the real Bitcoin chain, from the genesis block on 3 January 2009 to block ${nf(HEIGHT_END)} at the end of 2024, including all four halvings. The real chain holds more than a billion transactions; Chain-Check models a representative ${nf(nTx)} of them, placed in the blocks where they would have been mined. Built in ${nf(genMs / 1000, 1)} s, ${nf(screened.length)} deposits screened in ${nf(screenTime / 1000, 1)} s, all in this browser.`;
     renderCases();
     renderQueue();
     renderEntities();
@@ -904,7 +913,7 @@
   function timeline(a) {
     if (!a.steps.length || !a.main || typeof a.main.key !== 'number') return '';
     const e = ENT[a.main.key], steps = a.steps;
-    let rows = `<li class="cc-src"><span class="cc-dot" style="--c:${CAT[e.cat].color}"></span><div><b>${esc(e.name)}</b> ${pill(e.cat)}<span class="muted">sends the coins out · ${dtOf(steps[0].ms)}</span></div></li>`;
+    let rows = `<li class="cc-src"><span class="cc-dot" style="--c:${CAT[e.cat].color}"></span><div><b>${esc(e.name)}</b> ${pill(e.cat)}<span class="muted">sends the coins out · ${dtOf(steps[0].ms)} · block ${nf(heightAt(steps[0].ms))}</span></div></li>`;
     const maxRows = 14;
     steps.forEach((s, k) => {
       if (steps.length > maxRows && k === 6) rows += `<li class="cc-gap"><span class="cc-dot"></span><div class="muted">… ${steps.length - 11} more hops …</div></li>`;
@@ -913,7 +922,7 @@
       const peel = s.nIn === 1 && s.nOut === 2 && !last && s.val >= 0.6 * s.outTotal;
       const gap = k > 0 ? s.ms - steps[k - 1].ms : 0;
       rows += `<li${last ? ' class="cc-dep"' : ''}><span class="cc-dot"></span><div>
-        <b class="num">${btc(s.val)} BTC</b> → ${last ? '<b>Nordstern deposit</b>' : `<span class="mono">${shortA(s.to)}</span>`} <span class="muted">· ${dtOf(s.ms)}${gap > 30 * 864e5 ? ` · after ${duration(gap)}` : ''}</span>
+        <b class="num">${btc(s.val)} BTC</b> → ${last ? '<b>Nordstern deposit</b>' : `<span class="mono">${shortA(s.to)}</span>`} <span class="muted">· ${dtOf(s.ms)} · block ${nf(heightAt(s.ms))}${gap > 30 * 864e5 ? ` · after ${duration(gap)}` : ''}</span>
         <span class="cc-tags">${peel ? `<span class="cc-tag">peel: ${pct(1 - s.val / s.outTotal)} split off</span>` : ''}${s.nIn > 1 ? `<span class="cc-tag">${s.nIn} inputs merged</span>` : ''}${s.nOut > 2 ? `<span class="cc-tag">split into ${s.nOut}</span>` : ''}<span class="mono muted">tx ${txStr(s.t).slice(0, 10)}…</span></span></div></li>`;
     });
     return `<ol class="cc-time">${rows}</ol>`;
@@ -922,9 +931,9 @@
     if (!a.main || a.main.best < 0) return '';
     const o = a.tr.nO[a.main.best], org = originOf(o);
     if (!org) return '';
-    const b = txBlock[org.t], ms = txTime[org.t];
+    const ms = txTime[org.t], b = heightAt(ms);
     const via = typeof a.main.key === 'number' ? ENT[a.main.key].name : 'this wallet';
-    return `<p>Following the largest coin on this path even further back, past ${esc(via)}, Chain-Check reaches the transaction where the bitcoin was created: <b>block #${nf(b)}</b> on ${dateOf(ms)}, as a ${btc(reward(b))} BTC mining reward paid to ${esc(ownerLabel(org.to))}. That is ${nf(org.hops + a.main.minHop)} transactions before this deposit. Every bitcoin starts as a block reward; its later history is what decides whether it is clean.</p>`;
+    return `<p>Following the largest coin on this path even further back, past ${esc(via)}, Chain-Check reaches the transaction where the bitcoin was created: <b>block #${nf(b)}</b> on ${dateOf(ms)}, as a ${(rewardAt(b) / SAT).toLocaleString('en-US', { maximumFractionDigits: 8 })} BTC mining reward paid to ${org.to >= 0 && addrLabel[org.to] >= 0 ? esc(ENT[addrLabel[org.to]].name) : 'a solo miner'}. That is ${nf(org.hops + a.main.minHop)} transactions before this deposit. Every bitcoin starts as a block reward; its later history is what decides whether it is clean.</p>`;
   }
   function clusterBox(a) {
     const r = clusterOf[a.inAddr], n = clusterSize[r];
@@ -945,7 +954,7 @@
         <div class="cc-big b-${a.band.key}"><strong class="num">${a.score}</strong><span>/100</span></div>
         <div class="cc-hd">
           ${c ? `<div class="eyebrow">Training case ${c.n}</div><h3>${esc(c.title)}</h3>` : '<div class="eyebrow">Deposit</div>'}
-          <p><b class="num">${btc(a.val)} BTC</b> received on ${dtOf(txTime[t])} · ${bandPill(a.band)} risk</p>
+          <p><b class="num">${btc(a.val)} BTC</b> received on ${dtOf(txTime[t])} in block ${nf(heightAt(txTime[t]))} · ${bandPill(a.band)} risk</p>
           <p class="mono muted">tx ${txStr(t)}</p>
         </div>
       </div>

@@ -730,7 +730,7 @@ function setCompliance(on) {
   if (!HEAD.h1) for (const k in parts) HEAD[k] = parts[k].innerHTML;
   parts.eyebrow.innerHTML = on ? 'Compliance mode · Chain-Check' : HEAD.eyebrow;
   parts.h1.innerHTML = on ? 'Follow the money, <em>back to the first block</em>.' : HEAD.h1;
-  parts.p.innerHTML = on ? 'A simulated blockchain with hundreds of thousands of transactions since 2011. Chain-Check screens every deposit at your exchange for links to darknet markets, mixers, ransomware, scams, hacks and sanctioned entities, and explains what it finds.' : HEAD.p;
+  parts.p.innerHTML = on ? 'The real Bitcoin block history from the genesis block in 2009 to the end of 2024, filled with hundreds of thousands of simulated transactions. Chain-Check screens every deposit at your exchange for links to darknet markets, mixers, ransomware, scams, hacks and sanctioned entities, and explains what it finds.' : HEAD.p;
 }
 function switchMode(m) {
   if (m === S.mode) return;
