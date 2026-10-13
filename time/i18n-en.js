@@ -34,5 +34,24 @@ window.I18N_EN = {
   'Die Regeln stammen aus der IANA-Zeitzonen-Datenbank, die mit dem Browser aktualisiert wird. Kurzfristige Gesetzesänderungen einzelner Länder kommen mit dem nächsten Browser-Update.':
     'The rules come from the IANA time zone database, which is updated with the browser. Short-notice law changes in individual countries arrive with the next browser update.',
   'Die Liste deiner Orte wird nur lokal in diesem Browser gespeichert (localStorage).': 'The list of your places is only stored locally in this browser (localStorage).',
+  'Zeitzonen-Planer': 'Time zone planner', 'Wann passt der Call': 'When does the call work', 'für alle': 'for everyone',
+  'Orte oder Zeitzonen der Teilnehmenden hinzufügen, Datum und Uhrzeit wählen. Du siehst sofort die Ortszeit – mit Sommer- oder Winterzeit für genau dieses Datum – auf der Karte und in der Zeitleiste.':
+    'Add the participants’ places or time zones, pick a date and time. You instantly see each local time – with summer or winter time for exactly that date – on the map and in the timeline.',
+  'Orte für den Call': 'Places for the call', 'Datum & Uhrzeit': 'Date & time', '+ Hinzufügen': '+ Add',
+  'Ort, Land oder Zeitzone – z. B. Vaduz, Japan, CET, EST, UTC+5': 'Place, country or time zone – e.g. Vaduz, Japan, CET, EST, UTC+5',
+  'Die Vorschläge zeigen schon die Zeitzone für das gewählte Datum, z. B. Vaduz → Mitteleuropäische Sommerzeit oder Winterzeit. Oder einfach auf die Karte tippen.':
+    'The suggestions already show the time zone for the chosen date, e.g. Vaduz → Central European Summer Time or Standard Time. Or simply tap the map.',
+  'Weltkarte mit den gewählten Orten, Zeitzonen-Streifen und Tag/Nacht': 'World map with the chosen places, time zone bands and day/night',
+  'Zeitzone der gewählten Orte (UTC-Abstand)': 'Time zone of the chosen places (UTC offset)', 'Nacht zum gewählten Zeitpunkt': 'Night at the chosen time',
+  'Karte antippen = nächsten Ort hinzufügen': 'Tap the map = add the nearest place',
+  '1 Ort': '1 place', 'Orte': 'places', 'Zeitzone': 'Time zone', 'Feste Zeitverschiebung': 'Fixed UTC offset', 'hinzugefügt': 'added',
+  'Nichts gefunden – versuche eine grössere Stadt, ein Land oder eine Zeitzone (z. B. CET, EST, UTC+5).': 'Nothing found – try a bigger city, a country or a time zone (e.g. CET, EST, UTC+5).',
+  'Zeitzone anpassen': 'Adjust time zone', 'Automatisch': 'Automatic', 'Alle Zeitzonen (nach Abstand zu UTC)': 'All time zones (by UTC offset)',
+  'Dort ist kein Ort in der Nähe – bitte über die Suche hinzufügen.': 'No place nearby – please add it via the search.',
+  'Nächste Umstellung': 'Next clock change', 'Tag': 'day', 'Name anpassen': 'Rename', 'Name anpassen, z. B. Kunde oder Team': 'Rename, e.g. client or team',
+  'angepasst': 'adjusted', 'Füge mindestens einen weiteren Ort hinzu, um gemeinsame Zeiten zu sehen.': 'Add at least one more place to see shared times.',
+  'Karte': 'Map',
+  'Landumrisse: Natural Earth 1:110m (gemeinfrei), über world-atlas (ISC). Die Streifen zeigen die nominellen Zeitzonen (je 15° Länge); die tatsächlichen Grenzen folgen Ländern und Regionen. Die Nachtseite wird aus dem Sonnenstand zum gewählten Zeitpunkt berechnet.':
+    'Land outlines: Natural Earth 1:110m (public domain), via world-atlas (ISC). The bands show the nominal time zones (15° of longitude each); the real borders follow countries and regions. The night side is calculated from the sun’s position at the chosen time.',
 };
 window.I18N_RULES = [];

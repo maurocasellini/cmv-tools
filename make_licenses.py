@@ -6,7 +6,7 @@ import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 NAMES = {"all": "all tools", "pdf": "PDF Toolkit", "scan": "Doc Scanner", "voice": "Voice to Text", "image": "Image Toolkit",
-         "video": "Video Toolkit", "translate": "Translator", "qr": "QR Codes"}
+         "video": "Video Toolkit", "translate": "Translator", "qr": "QR Codes", "safe": "File Safe", "time": "Time Zones"}
 
 items = json.load(open(os.path.join(HERE, "hub", "licenses.json"), encoding="utf-8"))
 lines = [

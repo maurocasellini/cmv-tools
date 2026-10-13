@@ -22,6 +22,8 @@
   {"name": "Bergamot Translator", "version": "0.4.9", "license": "MPL-2.0", "tools": ["translate"], "source": "https://github.com/browsermt/bergamot-translator"},
   {"name": "Firefox Translations models (de, fr, it, es ↔ en)", "version": "0.3.3", "license": "MPL-2.0", "tools": ["translate"], "source": "https://github.com/mozilla/firefox-translations-models"},
   {"name": "qrcode-generator", "version": "2.0.4", "license": "MIT", "tools": ["qr"], "source": "https://github.com/kazuhikoarase/qrcode-generator"},
+  {"name": "world-atlas (Natural Earth 1:110m land outlines)", "version": "2.0.2", "license": "ISC · data public domain", "tools": ["time"], "source": "https://github.com/topojson/world-atlas"},
+  {"name": "IANA time zone database – zone coordinates (zone1970.tab)", "version": "2026b", "license": "Public domain", "tools": ["time"], "source": "https://www.iana.org/time-zones"},
   {"name": "IBM Plex Sans & Mono (fonts)", "version": "–", "license": "OFL-1.1", "tools": ["all"], "source": "https://github.com/IBM/plex"},
   {"name": "Source Serif 4 (font)", "version": "–", "license": "OFL-1.1", "tools": ["all"], "source": "https://github.com/adobe-fonts/source-serif"},
   {"name": "Great Vibes, Dancing Script, Allura (signature fonts)", "version": "–", "license": "OFL-1.1", "tools": ["pdf"], "source": "https://fonts.google.com/attribution"},

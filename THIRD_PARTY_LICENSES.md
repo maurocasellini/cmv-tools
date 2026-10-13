@@ -30,6 +30,8 @@ The same list is shown at https://tools.cmventures.xyz/#licenses.
 | Bergamot Translator | 0.4.9 | MPL-2.0 | Translator | https://github.com/browsermt/bergamot-translator |
 | Firefox Translations models (de, fr, it, es ↔ en) | 0.3.3 | MPL-2.0 | Translator | https://github.com/mozilla/firefox-translations-models |
 | qrcode-generator | 2.0.4 | MIT | QR Codes | https://github.com/kazuhikoarase/qrcode-generator |
+| world-atlas (Natural Earth 1:110m land outlines) | 2.0.2 | ISC · data public domain | Time Zones | https://github.com/topojson/world-atlas |
+| IANA time zone database – zone coordinates (zone1970.tab) | 2026b | Public domain | Time Zones | https://www.iana.org/time-zones |
 | IBM Plex Sans & Mono (fonts) | – | OFL-1.1 | all tools | https://github.com/IBM/plex |
 | Source Serif 4 (font) | – | OFL-1.1 | all tools | https://github.com/adobe-fonts/source-serif |
 | Great Vibes, Dancing Script, Allura (signature fonts) | – | OFL-1.1 | PDF Toolkit | https://fonts.google.com/attribution |

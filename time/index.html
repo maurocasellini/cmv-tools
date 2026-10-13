@@ -29,27 +29,42 @@
 <main>
   <section id="home" class="view">
     <div class="hero slim">
-      <div class="eyebrow accent">Zeitzonen</div>
-      <h1>Wie spät ist es dort – <em>und wann passt es allen</em>?</h1>
-      <p>Orte hinzufügen, Datum und Uhrzeit wählen: Du siehst sofort die Zeit an jedem Ort – mit Sommer- und Winterzeit für genau dieses Datum – und welche Stunden für alle in die Arbeitszeit fallen.</p>
+      <div class="eyebrow accent">Zeitzonen-Planer</div>
+      <h1>Wann passt der Call <em>für alle</em>?</h1>
+      <p>Orte oder Zeitzonen der Teilnehmenden hinzufügen, Datum und Uhrzeit wählen. Du siehst sofort die Ortszeit – mit Sommer- oder Winterzeit für genau dieses Datum – auf der Karte und in der Zeitleiste.</p>
     </div>
 
-    <div class="controls">
-      <label class="field"><span>Datum</span>
-        <div class="date-row">
-          <button type="button" class="btn small" data-shift="-1" title="Tag zurück" aria-label="Tag zurück">‹</button>
-          <input id="date" type="date">
-          <button type="button" class="btn small" data-shift="1" title="Tag vor" aria-label="Tag vor">›</button>
+    <div class="planner">
+      <div class="step">
+        <div class="step-head"><span class="n">1</span><span>Orte für den Call</span><b id="count" class="count" data-no-i18n></b></div>
+        <div class="add-row">
+          <div class="search">
+            <input id="q" type="search" placeholder="Ort, Land oder Zeitzone – z. B. Vaduz, Japan, CET, EST, UTC+5" autocomplete="off" spellcheck="false" role="combobox" aria-controls="sug" aria-autocomplete="list">
+            <ul id="sug" class="sug" role="listbox" hidden></ul>
+          </div>
+          <button type="button" id="add" class="btn primary">+ Hinzufügen</button>
         </div>
-      </label>
-      <label class="field"><span>Uhrzeit in <b id="home-name" data-no-i18n></b></span><input id="time" type="time" step="300"></label>
-      <button type="button" id="now" class="btn">Jetzt</button>
-      <div class="field add"><span>Ort oder Zeitzone hinzufügen</span>
-        <div class="search">
-          <input id="q" type="search" placeholder="z. B. Tokio, New York, Indien, UTC …" autocomplete="off" spellcheck="false">
-          <ul id="sug" class="sug" hidden></ul>
+        <p class="hint">Die Vorschläge zeigen schon die Zeitzone für das gewählte Datum, z. B. Vaduz → Mitteleuropäische Sommerzeit oder Winterzeit. Oder einfach auf die Karte tippen.</p>
+      </div>
+      <div class="step">
+        <div class="step-head"><span class="n">2</span><span>Datum &amp; Uhrzeit</span></div>
+        <div class="when">
+          <label class="field"><span>Datum</span>
+            <div class="date-row">
+              <button type="button" class="btn small" data-shift="-1" title="Tag zurück" aria-label="Tag zurück">‹</button>
+              <input id="date" type="date">
+              <button type="button" class="btn small" data-shift="1" title="Tag vor" aria-label="Tag vor">›</button>
+            </div>
+          </label>
+          <label class="field"><span>Uhrzeit in <b id="home-name" data-no-i18n></b></span><input id="time" type="time" step="300"></label>
+          <button type="button" id="now" class="btn">Jetzt</button>
         </div>
       </div>
+    </div>
+
+    <div class="map-wrap">
+      <svg id="map" class="map" role="img" aria-label="Weltkarte mit den gewählten Orten, Zeitzonen-Streifen und Tag/Nacht"></svg>
+      <div class="map-legend"><span><i class="lg-band"></i>Zeitzone der gewählten Orte (UTC-Abstand)</span><span><i class="lg-night"></i>Nacht zum gewählten Zeitpunkt</span><span class="muted">Karte antippen = nächsten Ort hinzufügen</span></div>
     </div>
 
     <div id="zones" class="zones"></div>
@@ -88,6 +103,8 @@
     <p>Die Zeitzonen-Umrechnung läuft vollständig in deinem Browser über dessen eingebaute Zeitzonen-Datenbank (Intl API). Es werden keine Daten gesendet – die Seite darf technisch keine Verbindung zu anderen Servern aufbauen (Content Security Policy).</p>
     <h3>Genauigkeit</h3>
     <p>Die Regeln stammen aus der IANA-Zeitzonen-Datenbank, die mit dem Browser aktualisiert wird. Kurzfristige Gesetzesänderungen einzelner Länder kommen mit dem nächsten Browser-Update.</p>
+    <h3>Karte</h3>
+    <p>Landumrisse: Natural Earth 1:110m (gemeinfrei), über world-atlas (ISC). Die Streifen zeigen die nominellen Zeitzonen (je 15° Länge); die tatsächlichen Grenzen folgen Ländern und Regionen. Die Nachtseite wird aus dem Sonnenstand zum gewählten Zeitpunkt berechnet.</p>
     <h3>Speicher</h3>
     <p>Die Liste deiner Orte wird nur lokal in diesem Browser gespeichert (localStorage).</p>
   </section>
@@ -107,6 +124,7 @@
 <script src="i18n-en.js"></script>
 <script src="shared/i18n.js"></script>
 <script src="shared/common.js"></script>
+<script src="data.js"></script>
 <script src="cities.js"></script>
 <script src="time.js"></script>
 </body>
