@@ -720,7 +720,32 @@ function renderSelect() {
   if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
   dirty.select = false;
 }
+const HEAD = {};
+function setCompliance(on) {
+  document.body.classList.toggle('cc-on', on);
+  $('simView').hidden = on;
+  $('ccView').hidden = !on;
+  const top = document.querySelector('.top .brand');
+  const parts = { eyebrow: top.querySelector('.eyebrow'), h1: top.querySelector('h1'), p: top.querySelector('p') };
+  if (!HEAD.h1) for (const k in parts) HEAD[k] = parts[k].innerHTML;
+  parts.eyebrow.innerHTML = on ? 'Compliance mode · Chain-Check' : HEAD.eyebrow;
+  parts.h1.innerHTML = on ? 'Follow the money, <em>back to the first block</em>.' : HEAD.h1;
+  parts.p.innerHTML = on ? 'A simulated blockchain with hundreds of thousands of transactions since 2011. Chain-Check screens every deposit at your exchange for links to darknet markets, mixers, ransomware, scams, hacks and sanctioned entities, and explains what it finds.' : HEAD.p;
+}
+function switchMode(m) {
+  if (m === S.mode) return;
+  if (m === 'compliance') {
+    S.mode = 'compliance';
+    S.running = false;
+    S.epoch++;
+    renderMode();
+    window.ChainCheck?.open();
+    return;
+  }
+  init(m);
+}
 function renderMode() {
+  setCompliance(S.mode === 'compliance');
   document.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === S.mode)));
   $('lessonPanel').hidden = !teaching();
   $('difficulty').value = String(S.difficulty);
@@ -732,7 +757,7 @@ function renderMode() {
 
 let lastSlow = 0;
 function frame(now) {
-  if (!S.nodes.length) { requestAnimationFrame(frame); return; }
+  if (!S.nodes.length || S.mode === 'compliance') { requestAnimationFrame(frame); return; }
   if (dirty.net) buildSvg();
   autoTraffic(now);
   renderMsgs(now);
@@ -841,7 +866,7 @@ $('steps').addEventListener('click', e => {
   const li = e.target.closest('[data-step]'); if (!li) return;
   const i = +li.dataset.step; S.lesson[i] = !S.lesson[i]; dirty.lesson = true; lastSlow = 0;
 });
-document.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => { if (b.dataset.mode !== S.mode) init(b.dataset.mode); }));
+document.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => switchMode(b.dataset.mode)));
 $('btnRun').addEventListener('click', () => { S.running = !S.running; renderMode(); lastSlow = 0; });
 $('difficulty').addEventListener('change', e => { S.difficulty = +e.target.value; S.nodes.forEach(n => n.candidate = null); log(`Difficulty set to ${S.difficulty} leading zeros for new blocks`, 'block'); });
 $('hashrate').addEventListener('input', e => { S.hashrate = +e.target.value; $('hashrateOut').textContent = fmt(S.hashrate) + ' H/s'; });
@@ -981,7 +1006,7 @@ async function init(mode) {
 const startDlg = $('startDlg');
 startDlg.querySelectorAll('[data-start]').forEach(b => b.addEventListener('click', () => {
   startDlg.close();
-  if (b.dataset.start !== S.mode) init(b.dataset.start);
+  switchMode(b.dataset.start);
 }));
 window.CMV?.registerSW();
 init('teach').then(() => {

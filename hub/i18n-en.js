@@ -44,8 +44,8 @@ window.I18N_EN = {
   'QR-Codes für Links, WLAN und Visitenkarten – im eigenen Design, als PNG oder SVG.': 'QR codes for links, Wi-Fi and business cards – in your own design, as PNG or SVG.',
   'Squoosh-Codecs · ONNX': 'Squoosh codecs · ONNX', 'Squoosh-Codecs · IS-Net': 'Squoosh codecs · IS-Net',
   'Sprachnachrichten, Meetings und Videos lokal transkribieren – mit Zeitmarken, als Text oder Untertitel.': 'Transcribe voice messages, meetings and videos locally – with timestamps, as text or subtitles.',
-  'Eine Blockchain zum Anfassen: Blöcke minen, Zahlungen signieren und zusehen, wie jeder Knoten sie prüft – mit Lehrmodus für den Unterricht.':
-    'A blockchain you can touch: mine blocks, sign payments and watch every node check them – with a teaching mode for the classroom.',
+  'Eine Blockchain zum Anfassen: Blöcke minen, Zahlungen signieren und zusehen, wie jeder Knoten sie prüft – mit Lehrmodus und Compliance-Modus, der Geldflüsse bis zu Darknet, Mixern und Sanktionen zurückverfolgt.':
+    'A blockchain you can touch: mine blocks, sign payments and watch every node check them – with a teaching mode and a compliance mode that traces money back to darknet markets, mixers and sanctions.',
   'Lern-Tools': 'Learning tools',
   'Interaktive Simulationen, um Technologie zu verstehen und zu unterrichten.': 'Interactive simulations to understand and teach technology.',
   'Auf Einladung': 'By invitation', 'Invite only': 'Invite only',

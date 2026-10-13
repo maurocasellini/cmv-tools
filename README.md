@@ -31,7 +31,7 @@ WebAssembly.
 
 ```
 hub/ pdf/ scan/ voice/ image/ video/ translate/ qr/ safe/ time/   one folder per tool
-blockchaindemo/           blockchain simulation for teaching (no engines, no vendor files)
+blockchaindemo/           blockchain simulation for teaching, plus compliance mode Chain-Check (no engines, no vendor files)
 shared/                   design (base.css, fonts), DE/EN translation (i18n.js), helpers, service worker
 build.py                  builds dist/<tool>/ – downloads pinned npm packages, verifies SHA-256, self-hosts them;
                           runs pdf/web/build.py for the PDF Toolkit
