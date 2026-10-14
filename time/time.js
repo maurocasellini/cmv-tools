@@ -62,6 +62,19 @@
     const off = fmtOffset(offset(ms, tz));
     return { long: /^(GMT|UTC)[+−-]/.test(long) ? '' : long, abbr, off };
   }
+  // the clock format people use there: 12 h (5:30 AM) e.g. in the USA, India, Australia – 24 h in most of Europe
+  const h12Cache = new Map();
+  function uses12h(cc) {
+    if (!cc) return false;
+    if (!h12Cache.has(cc)) {
+      let hc = 'h23';
+      // the country's main language decides (Portugal → pt-PT: 24 h; USA → en-US: 12 h)
+      try { hc = new Intl.DateTimeFormat(new Intl.Locale('und-' + cc).maximize().language + '-' + cc, { hour: 'numeric' }).resolvedOptions().hourCycle; } catch { /* unknown region */ }
+      h12Cache.set(cc, hc === 'h11' || hc === 'h12');
+    }
+    return h12Cache.get(cc);
+  }
+  const ampm = (ms, tz) => new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: 'numeric', minute: '2-digit', hour12: true }).format(new Date(ms));
   const fmtDiff = (min) => `${Math.floor(min / 60)}${min % 60 ? ':' + two(min % 60) : ''} h`;
 
   // ---------------------------------------------------------------- Places & zones
@@ -140,6 +153,7 @@
     const z = ZC[p.tz];
     return z ? country(z[2]) : p.tz;
   }
+  const placeCountry = (p) => (p.city ? p.city.cc : ZC[p.tz] ? ZC[p.tz][2] : null);
   function coords(p) {
     if (p.city && p.city.lat != null) return [p.city.lat, p.city.lon];
     const z = ZC[p.tz] || (p.auto && ZC[p.auto]);
@@ -256,7 +270,7 @@
   function zoneList(ms) {
     // all IANA zones, sorted by their offset on the chosen date
     zoneOptions = ZONES.map((tz) => ({ tz, off: offset(ms, tz) })).sort((a, b) => a.off - b.off || a.tz.localeCompare(b.tz));
-    zoneOptions.ms = ms;
+    zoneOptions.key = refDate;
     return zoneOptions;
   }
   function zoneSelect(p, ms) {
@@ -264,21 +278,33 @@
     sel.className = 'z-select';
     sel.setAttribute('aria-label', t('Zeitzone anpassen'));
     sel.setAttribute('data-no-i18n', '');
-    const opts = zoneOptions && zoneOptions.ms === ms ? zoneOptions : zoneList(ms);
     const auto = document.createElement('option');
     auto.value = '';
     auto.textContent = `${t('Automatisch')} – ${p.auto}`;
     sel.append(auto);
-    const grp = document.createElement('optgroup');
-    grp.label = t('Alle Zeitzonen (nach Abstand zu UTC)');
-    for (const o of opts) {
-      const op = document.createElement('option');
-      op.value = o.tz;
-      op.textContent = `${fmtOffset(o.off)} · ${o.tz.replace(/_/g, ' ')}`;
-      grp.append(op);
-    }
-    sel.append(grp);
+    if (p.tz !== p.auto) { const cur = document.createElement('option'); cur.value = p.tz; cur.textContent = `${fmtOffset(offset(ms, p.tz))} · ${p.tz.replace(/_/g, ' ')}`; sel.append(cur); }
     sel.value = p.tz === p.auto ? '' : p.tz;
+    // the full list (≈ 400 zones) is only built when the field is opened – keeps the slider fast
+    const fill = () => {
+      if (sel.dataset.full) return;
+      sel.dataset.full = '1';
+      const keep = sel.value;
+      sel.length = 1;
+      const grp = document.createElement('optgroup');
+      grp.label = t('Alle Zeitzonen (nach Abstand zu UTC)');
+      const opts = zoneOptions && zoneOptions.key === refDate ? zoneOptions : zoneList(ms);
+      for (const o of opts) {
+        const op = document.createElement('option');
+        op.value = o.tz;
+        op.textContent = `${fmtOffset(o.off)} · ${o.tz.replace(/_/g, ' ')}`;
+        grp.append(op);
+      }
+      sel.append(grp);
+      sel.value = keep;
+    };
+    sel.addEventListener('pointerdown', fill);
+    sel.addEventListener('focus', fill);
+    sel.addEventListener('keydown', fill);
     return sel;
   }
 
@@ -328,7 +354,7 @@
       const c = coords(r.p);
       if (!c) return '';
       const [lat, lon] = c, below = i % 2 === 1;
-      const label = `${placeTitle(r.p)} ${two(r.w.h)}:${two(r.w.mi)}`;
+      const label = `${placeTitle(r.p)} ${two(r.w.h)}:${two(r.w.mi)}${uses12h(placeCountry(r.p)) ? ` (${ampm(ms, r.p.tz)})` : ''}`;
       const anchor = lon > 120 ? 'end' : lon < -150 ? 'start' : 'middle';
       return `<g class="pin${i === 0 ? ' home' : ''}"><circle cx="${X(lon)}" cy="${Y(lat)}" r="2.2"/>
         <text x="${X(lon)}" y="${Y(lat) + (below ? 7.5 : -4)}" text-anchor="${anchor}">${esc(label)}</text></g>`;
@@ -355,10 +381,19 @@
   function dayLabel(ms, tz, opts) { return new Intl.DateTimeFormat(lang() === 'en' ? 'en-GB' : 'de-CH', { timeZone: tz, ...opts }).format(new Date(ms)); }
   const band = (h) => (h >= 8 && h < 18 ? 'work' : (h >= 7 && h < 8) || (h >= 18 && h < 21) ? 'edge' : 'night');
 
+  // per day: next clock change of a zone (expensive to search, the same all day)
+  const changeCache = new Map();
+  function changeFor(tz) {
+    const k = tz + '|' + refDate;
+    if (!changeCache.has(k)) { const [y, m, d] = refDate.split('-').map(Number); changeCache.set(k, nextChange(Date.UTC(y, m - 1, d, 12), tz)); }
+    return changeCache.get(k);
+  }
+
   function render() {
     const ms = refInstant(), home = places[0].tz;
     $('#date').value = refDate;
     $('#time').value = `${two(Math.floor(refMin / 60))}:${two(refMin % 60)}`;
+    if (document.activeElement !== $('#slide')) $('#slide').value = refMin;
     $('#home-name').textContent = placeTitle(places[0]);
     const [y, m, d] = refDate.split('-').map(Number);
     const day0 = instant(y, m, d, 0, 0, home);
@@ -372,7 +407,7 @@
         const at = day0 + k * 3600000, lw = wall(at, p.tz);
         cells.push({ k, h: lw.h, mi: lw.mi, b: band(lw.h), midnight: lw.h === 0, day: lw.h === 0 ? dayLabel(at, p.tz, { weekday: 'short', day: 'numeric', month: 'numeric' }) : '' });
       }
-      return { p, i, w, off, dd, diff: off - offset(ms, home), summer: isSummer(ms, p.tz), dst: hasDst(ms, p.tz), ch: nextChange(ms, p.tz), cells };
+      return { p, i, w, off, dd, diff: off - offset(ms, home), summer: isSummer(ms, p.tz), dst: hasDst(ms, p.tz), ch: changeFor(p.tz), cells };
     });
     const allWork = Array.from({ length: 24 }, (_, k) => rows.every((r) => r.cells[k].b === 'work'));
 
@@ -395,6 +430,7 @@
           </div>
           <div class="z-time">
             <div class="z-clock" data-no-i18n>${two(r.w.h)}:${two(r.w.mi)}${r.dd ? `<sup>${r.dd > 0 ? '+' : '−'}${Math.abs(r.dd)} ${t('Tag')}</sup>` : ''}</div>
+            ${uses12h(placeCountry(r.p)) ? `<div class="z-local" title="${t('So schreibt man die Uhrzeit dort')}" data-no-i18n>${ampm(ms, r.p.tz)}</div>` : ''}
             <div class="z-date" data-no-i18n>${dayLabel(ms, r.p.tz, { weekday: 'short', day: 'numeric', month: 'short' })}</div>
           </div>
         </div>
@@ -472,6 +508,13 @@
   // ---------------------------------------------------------------- Date & time
   $('#date').addEventListener('change', (e) => { if (e.target.value) { refDate = e.target.value; update(); } });
   $('#time').addEventListener('change', (e) => { const [h, m] = (e.target.value || '0:0').split(':').map(Number); refMin = h * 60 + (m || 0); update(); });
+  // slider: live while dragging (one redraw per frame), saved when released
+  let frame = 0;
+  $('#slide').addEventListener('input', (e) => {
+    refMin = +e.target.value;
+    if (!frame) frame = requestAnimationFrame(() => { frame = 0; render(); });
+  });
+  $('#slide').addEventListener('change', (e) => { refMin = +e.target.value; update(); });
   $('#now').addEventListener('click', () => { const w = wall(Date.now(), places[0].tz); refDate = today(places[0].tz); refMin = w.h * 60 + w.mi; update(); });
   document.querySelectorAll('[data-shift]').forEach((b) => b.addEventListener('click', () => {
     const [y, m, d] = refDate.split('-').map(Number), x = new Date(Date.UTC(y, m - 1, d + +b.dataset.shift));
@@ -484,7 +527,8 @@
     const ms = refInstant();
     return places.map((p) => {
       const z = zoneText(ms, p.tz);
-      return `${placeTitle(p)}: ${dayLabel(ms, p.tz, { weekday: 'short', day: 'numeric', month: 'numeric', year: 'numeric' })}, ${hm(wall(ms, p.tz))} (${[z.abbr, z.off].filter(Boolean).join(', ')})`;
+      const local = uses12h(placeCountry(p)) ? ` / ${ampm(ms, p.tz)}` : '';
+      return `${placeTitle(p)}: ${dayLabel(ms, p.tz, { weekday: 'short', day: 'numeric', month: 'numeric', year: 'numeric' })}, ${hm(wall(ms, p.tz))}${local} (${[z.abbr, z.off].filter(Boolean).join(', ')})`;
     }).join('\n');
   }
   async function copy(text, msg) {

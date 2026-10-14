@@ -16,8 +16,11 @@
 .add-row .btn { flex: none; }
 @media (max-width: 640px) { .add-row { flex-wrap: wrap; } .add-row .search { flex-basis: 100%; } .add-row .btn { flex: 1; } }
 .hint { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
-.when { display: grid; grid-template-columns: 1fr 140px auto; gap: 12px; align-items: end; }
-@media (max-width: 480px) { .when { grid-template-columns: 1fr 1fr; } .when .field:first-child { grid-column: 1 / -1; } }
+.when { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.when .field:first-child { flex: 1 1 210px; min-width: 0; }
+.when .field:nth-child(2) { flex: 1 1 120px; min-width: 0; }
+.when .field input { width: 100%; box-sizing: border-box; }
+.when #now { flex: none; }
 .date-row { display: flex; gap: 6px; }
 .date-row input { flex: 1; min-width: 0; }
 .field b { color: var(--text); font-weight: 500; text-transform: none; letter-spacing: 0; font-family: var(--sans); font-size: 13px; }
@@ -121,3 +124,7 @@
   .map .pin text { font-size: 8px; stroke-width: 2px; } .map .pin circle { r: 3.4; }
   .map .band-label { font-size: 5.5px; } .map .band-hi-label { font-size: 7px; }
 }
+.slider { grid-column: 1 / -1; margin-top: 14px; }
+.slider input { width: 100%; margin: 0; accent-color: var(--accent); height: 28px; }
+.slide-marks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--muted); padding: 0 6px; }
+.z-local { font-family: var(--mono); font-size: 13px; color: var(--accent); margin-top: 4px; }

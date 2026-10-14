@@ -53,5 +53,7 @@ window.I18N_EN = {
   'Karte': 'Map',
   'Landumrisse: Natural Earth 1:110m (gemeinfrei), über world-atlas (ISC). Die Streifen zeigen die nominellen Zeitzonen (je 15° Länge); die tatsächlichen Grenzen folgen Ländern und Regionen. Die Nachtseite wird aus dem Sonnenstand zum gewählten Zeitpunkt berechnet.':
     'Land outlines: Natural Earth 1:110m (public domain), via world-atlas (ISC). The bands show the nominal time zones (15° of longitude each); the real borders follow countries and regions. The night side is calculated from the sun’s position at the chosen time.',
+  'Uhrzeit verschieben': 'Move the time', 'Regler schieben – alle Ortszeiten, Karte und Zeitleiste gehen live mit.': 'Drag the slider – all local times, the map and the timeline follow live.',
+  'So schreibt man die Uhrzeit dort': 'How the time is written there',
 };
 window.I18N_RULES = [];
