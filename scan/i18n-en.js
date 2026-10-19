@@ -58,6 +58,7 @@ window.I18N_EN = {
   'Blatt ins Bild halten': 'Hold the page in view', 'Blatt erkannt': 'Page detected', 'Ruhig halten …': 'Hold still …',
   'Nächste Seite hinlegen': 'Place the next page', 'Blatt erkannt – jetzt auslösen': 'Page detected – tap to capture',
   'Kein Zugriff auf die Kamera. Bitte im Browser erlauben – oder „Foto aufnehmen“ verwenden.': 'No camera access. Please allow it in the browser – or use “Take photo”.',
+  'Gescannt – nächste Seite hinlegen': 'Scanned – place the next page', 'Schon gescannt – nächste Seite hinlegen': 'Already scanned – place the next page',
   'Auto': 'Auto', 'Jetzt aufnehmen': 'Capture now', 'Licht': 'Light',
 };
 window.I18N_RULES = [

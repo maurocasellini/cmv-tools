@@ -93,3 +93,4 @@
 .cam-thumb { position: relative; width: 34px; height: 46px; background: #1b2133 center / cover no-repeat; border: 1px solid #3a4260; }
 .cam-thumb[data-n]::after { content: attr(data-n); position: absolute; right: -8px; top: -8px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px;
   background: #c47d45; color: #fff; font-size: 11px; line-height: 20px; text-align: center; letter-spacing: 0; }
+.cam-svg polygon.done { fill: rgba(74, 170, 120, .12); stroke: #4aaa78; stroke-dasharray: 10 7; }

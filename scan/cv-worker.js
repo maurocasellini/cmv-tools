@@ -201,7 +201,7 @@ function percentile(f32, p) {
   return sample[Math.min(sample.length - 1, Math.floor((p / 100) * sample.length))];
 }
 
-async function detect({ data, width, height }) {
+async function detect({ data, width, height, allowFull }) {
   const cv = await loadCV();
   const keep = [];
   const M = (m) => { keep.push(m); return m; };
@@ -308,9 +308,11 @@ async function detect({ data, width, height }) {
     }
     if (!best || bs < 0.45) {
       // nothing convincing – if almost the whole photo is paper, the page fills the frame
-      let paper = 0;
-      for (let i = 0; i < N; i += 7) paper += segd[i] > 0;
-      if (paper / Math.ceil(N / 7) > 0.8) return { corners: [{ x: 0.01, y: 0.01 }, { x: 0.99, y: 0.01 }, { x: 0.99, y: 0.99 }, { x: 0.01, y: 0.99 }] };
+      // (only for photos, not the live camera; and only if it is bright and has something written on it)
+      let paper = 0, sum = 0, sq = 0, n = 0;
+      for (let i = 0; i < N; i += 7) { paper += segd[i] > 0; const v = Ld[i]; sum += v; sq += v * v; n++; }
+      const mean = sum / n, sd = Math.sqrt(Math.max(0, sq / n - mean * mean));
+      if (allowFull && paper / n > 0.8 && mean > 140 && sd > 12) return { corners: [{ x: 0.01, y: 0.01 }, { x: 0.99, y: 0.01 }, { x: 0.99, y: 0.99 }, { x: 0.01, y: 0.99 }] };
       return { corners: null };
     }
     return { corners: best.map((p) => ({ x: p.x / w, y: p.y / h })) };

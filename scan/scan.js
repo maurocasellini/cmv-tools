@@ -75,7 +75,7 @@
 
   async function detect(page) {
     const px = pixels(page.src, 900);
-    const { corners } = await cv('detect', px, [px.data.buffer]);
+    const { corners } = await cv('detect', { ...px, allowFull: !page.live }, [px.data.buffer]);
     return corners;
   }
 
@@ -514,9 +514,10 @@
   // The page is detected in the video several times per second. When it has been held still for a moment
   // the frame is captured; the next capture waits until the page was moved or replaced.
   const cam = $('#cam'), video = $('#cam-video'), camSvg = $('#cam-svg'), hint = $('#cam-hint');
-  const LIVE_SIDE = 640, STEADY_MS = 900, STILL = 0.02, MOVED = 0.07, CHANGED = 14;
+  const LIVE_SIDE = 640, STEADY_MS = 900, STILL = 0.02, MOVED = 0.15, CHANGED = 22;
+  const SAME_PAGE = 0.9, NEW_PAGE = 0.8;   // fingerprint correlation: above = already scanned, below = clearly another page
   let stream = null, camTimer = 0, camPages = [];
-  let live = null;   // { quad, steadySince, armed, ref, refSig, lastShot, seen }
+  let live = null;   // { quad, steadySince, gone, missing, ref, refSig, lastShot, fps }
 
   const camSupported = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
   if (camSupported) {
@@ -546,6 +547,63 @@
   }
   const sigDiff = (a, b) => { let s = 0; for (let i = 0; i < a.length; i++) s += Math.abs(a[i] - b[i]); return s / a.length; };
 
+  // Page fingerprint: the page straightened to 96×132, ink relative to the local paper brightness (so light and
+  // shadows do not matter), averaged into a coarse 16×22 grid. Two views of the same page correlate strongly.
+  function homography(dst) {
+    // maps the unit square (0,0)(1,0)(1,1)(0,1) to the four points dst
+    const [p0, p1, p2, p3] = dst;
+    const dx1 = p1.x - p2.x, dx2 = p3.x - p2.x, dy1 = p1.y - p2.y, dy2 = p3.y - p2.y;
+    const sx = p0.x - p1.x + p2.x - p3.x, sy = p0.y - p1.y + p2.y - p3.y;
+    const den = dx1 * dy2 - dx2 * dy1 || 1e-9;
+    const g = (sx * dy2 - dx2 * sy) / den, h = (dx1 * sy - sx * dy1) / den;
+    return [p1.x - p0.x + g * p1.x, p3.x - p0.x + h * p3.x, p0.x, p1.y - p0.y + g * p1.y, p3.y - p0.y + h * p3.y, p0.y, g, h];
+  }
+  function fingerprint(frame, q) {
+    const W = frame.width, H = frame.height, FW = 96, FH = 132;
+    const d = frame.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, W, H).data;
+    const [a, b, c, e, f, g2, g, h] = homography(q.map((p) => ({ x: p.x * W, y: p.y * H })));
+    const img = new Float32Array(FW * FH);
+    for (let y = 0; y < FH; y++) for (let x = 0; x < FW; x++) {
+      const u = (x + 0.5) / FW, v = (y + 0.5) / FH, z = g * u + h * v + 1;
+      const sx = Math.min(W - 1, Math.max(0, Math.round((a * u + b * v + c) / z))), sy = Math.min(H - 1, Math.max(0, Math.round((e * u + f * v + g2) / z)));
+      const i = (sy * W + sx) * 4;
+      img[y * FW + x] = (d[i] + d[i + 1] + d[i + 2]) / 3 + 1;
+    }
+    // local paper brightness: max over 9×9, then a 15×15 mean (separable)
+    const pass = (src, r, op) => {
+      const tmp = new Float32Array(src.length), out = new Float32Array(src.length);
+      for (let y = 0; y < FH; y++) for (let x = 0; x < FW; x++) {
+        let acc = op === 'max' ? 0 : 0, n = 0;
+        for (let k = -r; k <= r; k++) { const xx = Math.min(FW - 1, Math.max(0, x + k)), v = src[y * FW + xx]; if (op === 'max') acc = Math.max(acc, v); else { acc += v; n++; } }
+        tmp[y * FW + x] = op === 'max' ? acc : acc / n;
+      }
+      for (let y = 0; y < FH; y++) for (let x = 0; x < FW; x++) {
+        let acc = 0, n = 0;
+        for (let k = -r; k <= r; k++) { const yy = Math.min(FH - 1, Math.max(0, y + k)), v = tmp[yy * FW + x]; if (op === 'max') acc = Math.max(acc, v); else { acc += v; n++; } }
+        out[y * FW + x] = op === 'max' ? acc : acc / n;
+      }
+      return out;
+    };
+    const bg = pass(pass(img, 4, 'max'), 7, 'mean');
+    const GW = 16, GH = 22, M = 4, grid = new Float32Array(GW * GH), cnt = new Float32Array(GW * GH);
+    for (let y = M; y < FH - M; y++) for (let x = M; x < FW - M; x++) {
+      const ink = Math.max(0, Math.min(1, 1 - img[y * FW + x] / bg[y * FW + x]));
+      const gi = Math.floor(((y - M) / (FH - 2 * M)) * GH) * GW + Math.floor(((x - M) / (FW - 2 * M)) * GW);
+      grid[gi] += ink; cnt[gi]++;
+    }
+    let mean = 0;
+    for (let i = 0; i < grid.length; i++) { grid[i] /= cnt[i] || 1; mean += grid[i]; }
+    mean /= grid.length;
+    let sd = 0;
+    for (let i = 0; i < grid.length; i++) { grid[i] -= mean; sd += grid[i] * grid[i]; }
+    sd = Math.sqrt(sd / grid.length) || 1;
+    for (let i = 0; i < grid.length; i++) grid[i] /= sd;
+    return grid;
+  }
+  const fpCorr = (a, b) => { let s = 0; for (let i = 0; i < a.length; i++) s += a[i] * b[i]; return s / a.length; };
+  // how similar is this page to the most similar one already scanned (−1 … 1)
+  const scannedBefore = (fp) => (live && live.fps.length ? Math.max(...live.fps.map((x) => fpCorr(fp, x))) : -1);
+
   async function openCam() {
     warmUp();
     camPages = [];
@@ -570,7 +628,7 @@
     $('#cam-torch').classList.toggle('hidden', !caps.torch);
     $('#cam-torch').classList.remove('on');
     if (caps.focusMode && caps.focusMode.includes('continuous')) track.applyConstraints({ advanced: [{ focusMode: 'continuous' }] }).catch(() => {});
-    live = { quad: null, steadySince: 0, armed: true, ref: null, refSig: null, lastShot: 0, seen: false };
+    live = { quad: null, steadySince: 0, gone: true, missing: 0, ref: null, refSig: null, lastShot: 0, fps: [], seen: false };
     hint.textContent = t('Bild-Software wird geladen …');
     camLoop();
   }
@@ -611,43 +669,57 @@
     const L = live;
     L.seen = true;
     if (!q) {
-      L.quad = null; L.steadySince = 0; L.armed = true;
+      // the page was taken away (or covered) for a moment: the next one may be a new page
+      if (++L.missing >= 3) L.gone = true;
+      L.quad = null; L.steadySince = 0;
       drawLive(null, false);
-      hint.textContent = t('Blatt ins Bild halten');
+      hint.textContent = L.fps.length && !L.gone ? `✓ ${t('Gescannt – nächste Seite hinlegen')}` : t('Blatt ins Bild halten');
       return;
     }
+    L.missing = 0;
     if (L.quad && quadDist(q, L.quad) < STILL) { if (!L.steadySince) L.steadySince = now; }
     else L.steadySince = 0;
     L.quad = q;
-    if (!L.armed && L.ref && (quadDist(q, L.ref) > MOVED || sigDiff(signature(frame), L.refSig) > CHANGED)) L.armed = true;
+    if (L.ref && (quadDist(q, L.ref) > MOVED || sigDiff(signature(frame), L.refSig) > CHANGED)) L.gone = true;
     const steady = L.steadySince && now - L.steadySince > STEADY_MS;
-    drawLive(q, L.armed && !!L.steadySince);
-    if (!L.armed) hint.textContent = t('Nächste Seite hinlegen');
+    let state = 'new';
+    if (steady || !$('#cam-auto').checked) {
+      // same content as a page already scanned? then wait for the next page
+      const sim = scannedBefore(fingerprint(frame, q));
+      (L.sims ||= []).push(+sim.toFixed(3));        // for automated tests
+      if (L.sims.length > 60) L.sims.shift();
+      if (sim > SAME_PAGE || (!L.gone && sim > NEW_PAGE)) state = 'done';
+    } else if (L.fps.length && !L.gone) state = 'done';
+    // a new page has to look new twice in a row (the first frames after putting it down can be blurry)
+    L.newCount = steady && state === 'new' ? (L.newCount || 0) + 1 : 0;
+    drawLive(q, state === 'new' && !!L.steadySince, state === 'done');
+    if (state === 'done') hint.textContent = `✓ ${t('Schon gescannt – nächste Seite hinlegen')}`;
     else if (!$('#cam-auto').checked) hint.textContent = t('Blatt erkannt – jetzt auslösen');
-    else if (steady && now - L.lastShot > 1200) capture(q);
+    else if (steady && L.newCount >= 2 && now - L.lastShot > 1200) capture(q, frame);
     else hint.textContent = L.steadySince ? t('Ruhig halten …') : t('Blatt erkannt');
   }
 
-  function drawLive(q, steady) {
+  function drawLive(q, steady, done) {
     if (!q) { camSvg.innerHTML = ''; return; }
     const r = cam.querySelector('.cam-stage').getBoundingClientRect();
     const vw = video.videoWidth, vh = video.videoHeight;
     const s = Math.min(r.width / vw, r.height / vh);
     const w = vw * s, h = vh * s, x0 = (r.width - w) / 2, y0 = (r.height - h) / 2;
     camSvg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
-    camSvg.innerHTML = `<polygon class="${steady ? 'steady' : ''}" points="${q.map((p) => `${x0 + p.x * w},${y0 + p.y * h}`).join(' ')}"/>`;
+    camSvg.innerHTML = `<polygon class="${done ? 'done' : steady ? 'steady' : ''}" points="${q.map((p) => `${x0 + p.x * w},${y0 + p.y * h}`).join(' ')}"/>`;
   }
 
-  function capture(q) {
+  function capture(q, frame) {
     if (!video.videoWidth) return;
     const L = live;
     const src = frameCanvas(SRC_MAX);
     const fresh = q || (L && L.quad);
-    const page = { id: ++seq, src, corners: fresh ? fresh.map((p) => ({ ...p })) : null, rotate: 0, out: null, busy: true };
+    if (L && fresh) L.fps.push(fingerprint(frame || frameCanvas(LIVE_SIDE), fresh));
+    const page = { id: ++seq, src, corners: fresh ? fresh.map((p) => ({ ...p })) : null, rotate: 0, out: null, busy: true, live: true };
     pages.push(page);
     camPages.push(page);
     if (L) {
-      L.armed = false; L.ref = fresh; L.refSig = signature(src); L.lastShot = performance.now(); L.steadySince = 0;
+      L.gone = false; L.newCount = 0; L.ref = fresh; L.refSig = signature(frame || frameCanvas(LIVE_SIDE)); L.lastShot = performance.now(); L.steadySince = 0;
       hint.textContent = `${t('Seite')} ${camPages.length} ✓`;
     }
     const fl = $('#cam-flash');
@@ -687,5 +759,5 @@
   document.addEventListener('langchange', drawGrid);
   route();
   window.CMV.registerSW();
-  window.__scan = { pages, addFiles };   // for automated tests
+  window.__scan = { pages, addFiles, get live() { return live; } };   // for automated tests
 })();
