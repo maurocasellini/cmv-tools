@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Time Zones</title>
+  <rect width="64" height="64" rx="14" fill="#242b41"/>
+  <circle cx="32" cy="32" r="18" fill="none" stroke="#f1f1ec" stroke-width="3"/>
+  <path d="M14 32h36M32 14c-6 5-8 11-8 18s2 13 8 18M32 14c6 5 8 11 8 18s-2 13-8 18" fill="none" stroke="#f1f1ec" stroke-width="2"/>
+  <circle cx="45" cy="45" r="10" fill="#c47d45"/><path d="M45 39.5V45l3.5 2.5" fill="none" stroke="#242b41" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

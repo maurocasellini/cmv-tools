@@ -1,0 +1,407 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "echo no dependencies",
+  "buildCommand": "python3 build.py",
+  "outputDirectory": "dist",
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(self), microphone=(self), geolocation=(), payment=(), usb=()"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)cv-worker.js",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).(html|css|js|mjs|json|webmanifest)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)vendor/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000"
+        }
+      ]
+    },
+    {
+      "source": "/voice/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "voice.cmventures.xyz"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        }
+      ]
+    },
+    {
+      "source": "/image/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "image.cmventures.xyz"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        }
+      ]
+    },
+    {
+      "source": "/video/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "video.cmventures.xyz"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        }
+      ]
+    },
+    {
+      "source": "/translate/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "translate.cmventures.xyz"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "missing": [
+        {
+          "type": "host",
+          "value": "(tools|pdf|scan|voice|blockchaindemo|image|video|translate|qr|safe|time)\\.cmventures\\.xyz"
+        }
+      ],
+      "destination": "/hub/index.html",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "tools.cmventures.xyz"
+        }
+      ],
+      "destination": "/hub/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "tools.cmventures.xyz"
+        }
+      ],
+      "destination": "/hub/:path*"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "pdf.cmventures.xyz"
+        }
+      ],
+      "destination": "/pdf/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "pdf.cmventures.xyz"
+        }
+      ],
+      "destination": "/pdf/:path*"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "scan.cmventures.xyz"
+        }
+      ],
+      "destination": "/scan/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "scan.cmventures.xyz"
+        }
+      ],
+      "destination": "/scan/:path*"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "voice.cmventures.xyz"
+        }
+      ],
+      "destination": "/voice/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "voice.cmventures.xyz"
+        }
+      ],
+      "destination": "/voice/:path*"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "blockchaindemo.cmventures.xyz"
+        }
+      ],
+      "destination": "/blockchaindemo/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "blockchaindemo.cmventures.xyz"
+        }
+      ],
+      "destination": "/blockchaindemo/:path*"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "image.cmventures.xyz"
+        }
+      ],
+      "destination": "/image/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "image.cmventures.xyz"
+        }
+      ],
+      "destination": "/image/:path*"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "video.cmventures.xyz"
+        }
+      ],
+      "destination": "/video/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "video.cmventures.xyz"
+        }
+      ],
+      "destination": "/video/:path*"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "translate.cmventures.xyz"
+        }
+      ],
+      "destination": "/translate/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "translate.cmventures.xyz"
+        }
+      ],
+      "destination": "/translate/:path*"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "qr.cmventures.xyz"
+        }
+      ],
+      "destination": "/qr/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "qr.cmventures.xyz"
+        }
+      ],
+      "destination": "/qr/:path*"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "safe.cmventures.xyz"
+        }
+      ],
+      "destination": "/safe/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "safe.cmventures.xyz"
+        }
+      ],
+      "destination": "/safe/:path*"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "time.cmventures.xyz"
+        }
+      ],
+      "destination": "/time/index.html"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "time.cmventures.xyz"
+        }
+      ],
+      "destination": "/time/:path*"
+    }
+  ]
+}

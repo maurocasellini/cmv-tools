@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>File Safe</title>
+<meta name="description" content="Dateien und Nachrichten mit Passwort verschlüsseln, bevor du sie verschickst – im Browser, ohne Upload.">
+<meta name="theme-color" content="#242b41">
+<script src="shared/theme.js"></script>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="shared/fonts/fonts.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="safe.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="cmv-home" href="https://cmventures.xyz/" title="CM Ventures" aria-label="CM Ventures – Startseite"><img class="cmv-logo on-light" src="shared/brand/cmv-logo.svg" alt="CM Ventures" width="131" height="30"><img class="cmv-logo on-dark" src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="131" height="30"></a>
+  <a class="brand" href="./">
+    <img class="logo-img" src="logo.svg" alt="" width="30" height="30"><span class="logo-word"><b>File</b> <em>Safe</em></span>
+  </a>
+  <span class="local-badge" title="Alle Dateien bleiben auf deinem Gerät. Nichts wird hochgeladen.">Kein Upload</span>
+  <div class="spacer"></div>
+  <a class="all-tools" data-tool-link="hub">Alle Tools</a>
+  <div class="lang-switch" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de">DE</button><button type="button" data-lang="en">EN</button></div>
+</header>
+
+<main>
+  <section id="home" class="view">
+    <div class="hero slim">
+      <div class="eyebrow accent">Datei-Safe</div>
+      <h1>Verschlüsselt verschicken, <em>nur mit Passwort lesbar</em>.</h1>
+      <p>Verträge, Ausweise, Gehaltsabrechnungen: Datei oder Nachricht hier mit einem Passwort verschliessen und dann ganz normal per E-Mail, WhatsApp oder USB-Stick weitergeben. Ohne das Passwort ist der Inhalt wertlos.</p>
+    </div>
+
+    <div class="modes" role="tablist">
+      <button type="button" data-mode="enc" class="active" role="tab">Verschlüsseln</button>
+      <button type="button" data-mode="dec" role="tab">Entschlüsseln</button>
+    </div>
+
+    <div class="safe-grid">
+      <!-- Encrypt -->
+      <div class="pane" data-pane="enc">
+        <div class="kind seg" id="kind">
+          <button type="button" data-v="file" class="active">Datei</button>
+          <button type="button" data-v="text">Nachricht</button>
+        </div>
+        <div data-kind="file">
+          <label class="drop small" id="enc-drop">
+            <input id="enc-files" type="file" multiple hidden>
+            <strong>Dateien hierher ziehen</strong>
+            <span>oder <u>auswählen</u> – mehrere werden zu einem ZIP</span>
+          </label>
+          <ul id="enc-list" class="files"></ul>
+        </div>
+        <label class="field" data-kind="text" hidden><span>Nachricht</span><textarea id="enc-text" rows="6" placeholder="z. B. Zugangsdaten, IBAN, private Notiz …" data-no-i18n></textarea></label>
+
+        <div class="field"><span>Passwort</span>
+          <div class="pw-row">
+            <input id="enc-pw" type="password" autocomplete="new-password" spellcheck="false" data-no-i18n>
+            <button type="button" class="btn small" data-show="enc-pw" title="Passwort anzeigen">Zeigen</button>
+            <button type="button" class="btn small" id="gen" title="Sicheres Passwort erzeugen">Erzeugen</button>
+          </div>
+          <div class="meter"><i id="meter-bar"></i></div>
+          <small id="meter-text" class="muted small">Mindestens 10 Zeichen – oder „Erzeugen“ verwenden.</small>
+        </div>
+        <button id="enc-go" class="btn primary big">Verschlüsseln</button>
+
+        <div id="enc-result" class="result hidden">
+          <div class="eyebrow accent">Verschlüsselt</div>
+          <div data-res="file">
+            <h3 id="enc-name" data-no-i18n></h3>
+            <p id="enc-meta" class="muted"></p>
+            <div class="hero-actions">
+              <button id="enc-share" class="btn primary hidden">Teilen</button>
+              <button id="enc-dl" class="btn">Herunterladen</button>
+            </div>
+          </div>
+          <div data-res="text" hidden>
+            <textarea id="enc-out" rows="5" readonly data-no-i18n></textarea>
+            <div class="hero-actions"><button id="enc-copy" class="btn primary">Text kopieren</button></div>
+          </div>
+          <div class="tip">
+            <b>So bleibt es sicher:</b> Datei bzw. Text auf dem einen Weg schicken (z. B. E-Mail), das Passwort auf einem anderen (Anruf, SMS, persönlich).
+            <button id="copy-howto" class="link-btn">Anleitung für den Empfänger kopieren</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Decrypt -->
+      <div class="pane hidden" data-pane="dec">
+        <label class="drop small" id="dec-drop">
+          <input id="dec-file" type="file" hidden>
+          <strong>Verschlüsselte Datei hierher ziehen</strong>
+          <span>oder <u>auswählen</u> (.cmvsafe)</span>
+        </label>
+        <p id="dec-name" class="picked hidden" data-no-i18n></p>
+        <label class="field"><span>… oder verschlüsselten Text einfügen</span><textarea id="dec-text" rows="4" placeholder="CMVSAFE…" spellcheck="false" data-no-i18n></textarea></label>
+        <div class="field"><span>Passwort</span>
+          <div class="pw-row">
+            <input id="dec-pw" type="password" autocomplete="off" spellcheck="false" data-no-i18n>
+            <button type="button" class="btn small" data-show="dec-pw" title="Passwort anzeigen">Zeigen</button>
+          </div>
+        </div>
+        <button id="dec-go" class="btn primary big">Entschlüsseln</button>
+
+        <div id="dec-result" class="result hidden">
+          <div class="eyebrow accent">Entschlüsselt</div>
+          <div data-res="file">
+            <h3 id="dec-out-name" data-no-i18n></h3>
+            <p id="dec-meta" class="muted"></p>
+            <div class="hero-actions">
+              <button id="dec-share" class="btn primary hidden">Teilen / Sichern</button>
+              <button id="dec-dl" class="btn">Herunterladen</button>
+            </div>
+          </div>
+          <div data-res="text" hidden>
+            <pre id="dec-out-text" data-no-i18n></pre>
+            <div class="hero-actions"><button id="dec-copy" class="btn primary">Text kopieren</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="facts">
+      <li>AES-256-GCM, Schlüssel per PBKDF2 (600 000 Runden)</li>
+      <li>Dateien jeder Art, auch mehrere auf einmal</li>
+      <li>Kein Konto, kein Server, kein Link, der abläuft</li>
+    </ul>
+
+  <div class="how" id="how">
+    <div class="how-head">So funktioniert’s</div>
+    <h2>Ein Schloss, für das nur du den Schlüssel hast.</h2>
+    <div class="how-grid">
+      <div class="how-card"><span class="n">01</span><h3>Verschlüsselt wird bei dir</h3><p>Dein Browser verschliesst die Datei mit AES-256 – demselben Verfahren, das Banken und Behörden verwenden. Die Verschlüsselung ist im Browser eingebaut, es wird nichts zusätzlich geladen.</p></div>
+      <div class="how-card"><span class="n">02</span><h3>Das Passwort ist der Schlüssel</h3><p>Aus deinem Passwort wird der Schlüssel berechnet – absichtlich langsam, damit niemand Millionen Passwörter durchprobieren kann. Das Passwort wird nirgends gespeichert. Vergisst du es, kann auch niemand sonst die Datei öffnen.</p></div>
+      <div class="how-card"><span class="n">03</span><h3>Verschicken, wie du willst</h3><p>Die verschlüsselte Datei kannst du per E-Mail, WhatsApp oder Cloud teilen – wer sie abfängt, sieht nur Zahlensalat. Der Empfänger öffnet sie auf dieser Seite mit dem Passwort, auch offline.</p></div>
+    </div>
+    <p class="how-note">Anders als bei Download-Links von WeTransfer &amp; Co. liegt deine Datei nie auf einem fremden Server – und sie bleibt geschützt, egal wo sie später landet.</p>
+  </div>
+  </section>
+
+  <section id="about" class="view hidden legal">
+    <a class="back" href="#">← Zurück</a>
+    <h2>Hinweise zum Tool</h2>
+    <p>File Safe läuft vollständig in deinem Browser. Dateien, Nachrichten und Passwörter werden nur im Arbeitsspeicher deines Geräts verarbeitet und nie an einen Server gesendet – die Seite darf technisch keine Verbindung zu anderen Servern aufbauen (Content Security Policy).</p>
+    <h3>Verfahren</h3>
+    <p>AES-256-GCM in Blöcken zu 4 MB; jeder Block ist einzeln geprüft, Reihenfolge und Vollständigkeit sind abgesichert. Der Schlüssel wird mit PBKDF2-SHA-256 (600 000 Runden, zufälliges Salz) aus dem Passwort abgeleitet. Verwendet wird ausschliesslich die Web Crypto API des Browsers. Auch Dateiname und Dateityp sind verschlüsselt.</p>
+    <h3>Grenzen</h3>
+    <p>Die Sicherheit hängt am Passwort: Kurze oder erratbare Passwörter lassen sich durchprobieren. Am sichersten ist ein erzeugtes Passwort. Sehr grosse Dateien (über ca. 1–2 GB) können den Speicher des Browsers übersteigen.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <span class="foot-id"><a class="foot-brand" href="https://cmventures.xyz/" target="_blank" rel="noopener noreferrer"><img src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="92" height="21"></a><span>File Safe</span></span>
+  <nav class="foot-links">
+    <a href="https://cmventures.xyz/data-protection.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+    <a href="https://cmventures.xyz/#impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
+    <a href="#about">Hinweise zum Tool</a>
+    <a href="https://github.com/maurocasellini/cmv-tools/tree/master/safe" target="_blank" rel="noopener noreferrer">Quellcode</a>
+    <a data-tool-link="hub" data-hash="#licenses">Open-Source-Lizenzen</a>
+  </nav>
+</footer>
+
+<script src="i18n-en.js"></script>
+<script src="shared/i18n.js"></script>
+<script src="shared/common.js"></script>
+<script src="shared/zip.js"></script>
+<script src="crypto.js"></script>
+<script src="safe.js"></script>
+</body>
+</html>

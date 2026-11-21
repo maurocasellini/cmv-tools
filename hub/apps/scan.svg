@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Doc Scanner</title>
+  <rect width="64" height="64" rx="14" fill="#242b41"/>
+  <path d="M13 23V13h10M41 13h10v10M51 41v10H41M23 51H13V41" fill="none" stroke="#c47d45" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M23 20h13l6 6v18H23z" fill="none" stroke="#f1f1ec" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M36 20v6h6" fill="none" stroke="#f1f1ec" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M17 33h30" stroke="#c47d45" stroke-width="2.8" stroke-linecap="round"/>
+</svg>

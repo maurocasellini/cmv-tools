@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CM Ventures Tools</title>
+<meta name="description" content="Alltags-Tools, die komplett im Browser laufen – ohne Upload.">
+<meta name="theme-color" content="#242b41">
+<script src="shared/theme.js"></script>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="shared/fonts/fonts.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="hub.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="https://cmventures.xyz/" title="CM Ventures" aria-label="CM Ventures – Startseite">
+    <img class="cmv-logo on-light" src="shared/brand/cmv-logo.svg" alt="CM Ventures" width="166" height="38"><img class="cmv-logo on-dark" src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="166" height="38">
+  </a>
+  <a class="brand hub-word" href="./"><span class="logo-word"><em>Tools</em></span></a>
+  <span class="local-badge" title="Alle Dateien bleiben auf deinem Gerät. Nichts wird hochgeladen.">Kein Upload</span>
+  <div class="spacer"></div>
+  <div class="lang-switch" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de">DE</button><button type="button" data-lang="en">EN</button></div>
+</header>
+
+<main>
+  <section id="home">
+    <div class="hero">
+      <div class="eyebrow accent">Open Source + eigene Entwicklung · im Browser</div>
+      <div class="eyebrow">PDF · Scan · Sprache · Bild · Video · Übersetzen · QR</div>
+      <h1>Tools für jeden Tag. <em>Ohne Upload.</em></h1>
+      <p>Jedes Tool läuft vollständig auf deinem Gerät. Unter der Haube arbeiten bewährte Open-Source-Engines als WebAssembly – kombiniert mit eigenen Funktionen, Bedienoberflächen und Optimierungen von CM Ventures. Deine Dateien verlassen nie dein Gerät.</p>
+      <ul class="facts">
+        <li>Keine Konten, kein Tracking, keine Cookies</li>
+        <li>Technisch abgesichert: die Seiten dürfen nichts senden</li>
+        <li>Funktioniert nach dem ersten Laden auch offline</li>
+      </ul>
+    </div>
+
+    <div class="cat"><span class="num">01</span> Werkzeuge</div>
+    <div class="apps">
+      <a class="app" data-tool-link="pdf">
+        <img src="apps/pdf.svg" alt="" width="52" height="52">
+        <strong>PDF Toolkit</strong>
+        <span>Bearbeiten, unterschreiben, Formulare ausfüllen, zusammenfügen, komprimieren – über 20 Werkzeuge.</span>
+        <small>MuPDF · Pyodide</small>
+        <em class="go">Öffnen →</em>
+      </a>
+      <a class="app" data-tool-link="scan">
+        <img src="apps/scan.svg" alt="" width="52" height="52">
+        <strong>Doc Scanner</strong>
+        <span>Dokumente mit dem Handy scannen – Live-Scan löst selbst aus, richtet gerade und speichert ein durchsuchbares PDF.</span>
+        <small>OpenCV · Tesseract OCR</small>
+        <em class="go">Öffnen →</em>
+      </a>
+      <a class="app" data-tool-link="voice">
+        <img src="apps/voice.svg" alt="" width="52" height="52">
+        <strong>Voice to Text</strong>
+        <span>Sprachnachrichten, Meetings und Videos lokal transkribieren – mit Zeitmarken, als Text oder Untertitel.</span>
+        <small>Whisper · ONNX Runtime</small>
+        <em class="go">Öffnen →</em>
+      </a>
+      <a class="app" data-tool-link="image">
+        <img src="apps/image.svg" alt="" width="52" height="52">
+        <strong>Bild-Toolkit</strong>
+        <span>HEIC → JPG, verkleinern, Standort-Daten entfernen, Gesichter verpixeln, Hintergrund freistellen.</span>
+        <small>Squoosh-Codecs · IS-Net · YuNet</small>
+        <em class="go">Öffnen →</em>
+      </a>
+      <a class="app" data-tool-link="image" data-hash="#redact">
+        <img src="apps/redact.svg" alt="" width="52" height="52">
+        <strong>Screenshot schwärzen</strong>
+        <span>Namen, Kontonummern oder Adressen im Screenshot abdecken, bevor du ihn teilst – auch per Einfügen aus der Zwischenablage.</span>
+        <small>Teil des Bild-Toolkits</small>
+        <em class="go">Öffnen →</em>
+      </a>
+      <a class="app" data-tool-link="video">
+        <img src="apps/video.svg" alt="" width="52" height="52">
+        <strong>Video-Toolkit</strong>
+        <span>Videos kürzen, verkleinern, schneller oder langsamer machen, Untertitel einbrennen, in GIF umwandeln.</span>
+        <small>FFmpeg · x264</small>
+        <em class="go">Öffnen →</em>
+      </a>
+      <a class="app" data-tool-link="translate">
+        <img src="apps/translate.svg" alt="" width="52" height="52">
+        <strong>Übersetzer</strong>
+        <span>Texte und Untertitel übersetzen – Deutsch, Englisch, Französisch, Italienisch, Spanisch. Offline, ohne dass etwas an einen Dienst geht.</span>
+        <small>Mozilla Bergamot</small>
+        <em class="go">Öffnen →</em>
+      </a>
+      <a class="app" data-tool-link="qr">
+        <img src="apps/qr.svg" alt="" width="52" height="52">
+        <strong>QR-Codes</strong>
+        <span>QR-Codes für Links, WLAN und Visitenkarten – im eigenen Design, als PNG oder SVG.</span>
+        <small>qrcode-generator</small>
+        <em class="go">Öffnen →</em>
+      </a>
+      <a class="app" data-tool-link="safe">
+        <img src="apps/safe.svg" alt="" width="52" height="52">
+        <strong>File Safe</strong>
+        <span>Dateien und Nachrichten mit Passwort verschlüsseln, bevor du sie per E-Mail oder WhatsApp verschickst.</span>
+        <small>AES-256 · Web Crypto</small>
+        <em class="go">Öffnen →</em>
+      </a>
+      <a class="app" data-tool-link="time">
+        <img src="apps/time.svg" alt="" width="52" height="52">
+        <strong>Zeitzonen</strong>
+        <span>Mehrere Orte vergleichen, Meetings über Zeitzonen planen – mit Sommer- und Winterzeit fürs gewählte Datum.</span>
+        <small>IANA-Zeitzonen · Intl API</small>
+        <em class="go">Öffnen →</em>
+      </a>
+    </div>
+
+    <div class="cat"><span class="num">02</span> Lern-Tools</div>
+    <p class="cat-note">Interaktive Simulationen, um Technologie zu verstehen und zu unterrichten.</p>
+    <div class="apps learn">
+      <a class="app" data-tool-link="blockchaindemo">
+        <img src="apps/blockchain.svg" alt="" width="52" height="52">
+        <strong>Blockchain Demo</strong>
+        <span>Eine Blockchain zum Anfassen: Blöcke minen, Zahlungen signieren und zusehen, wie jeder Knoten sie prüft – mit Lehrmodus und Compliance-Modus, der Geldflüsse bis zu Darknet, Mixern und Sanktionen zurückverfolgt.</span>
+        <small>SHA-256 · ECDSA · UTXO</small>
+        <em class="go">Öffnen →</em>
+      </a>
+    </div>
+
+  <div class="how" id="how">
+    <div class="how-head">So funktioniert’s</div>
+    <h2>Wie geht das, ohne dass jemand mitliest?</h2>
+    <div class="how-grid">
+      <div class="how-card"><span class="n">01</span><h3>Das Programm kommt zu dir</h3><p>Beim Öffnen lädt dein Browser das Werkzeug herunter – ähnlich wie eine App aus dem App Store, nur ohne Installation.</p></div>
+      <div class="how-card"><span class="n">02</span><h3>Dein Gerät rechnet selbst</h3><p>Die eigentliche Arbeit – PDF bearbeiten, Text erkennen, übersetzen – erledigt der Prozessor deines Handys oder Computers. Deine Datei bleibt dabei im Arbeitsspeicher deines Geräts.</p></div>
+      <div class="how-card"><span class="n">03</span><h3>Senden ist technisch gesperrt</h3><p>Die Seiten sind so eingestellt, dass sie mit keinem anderen Server sprechen dürfen – nicht mit Google, nicht mit OpenAI, nicht einmal mit uns. Der Browser selbst setzt diese Regel durch.</p></div>
+    </div>
+    <p class="how-note">Vergleich: Ein Online-Dienst ist wie eine Hotline, der du deine Unterlagen vorliest. Diese Tools sind wie ein Taschenrechner, den du dir einmal holst – danach rechnest du selbst, und niemand hört zu. Die „Intelligenz“ dahinter ist eine Mischung: frei verfügbare Open-Source-Programme bekannter Organisationen wie Mozilla (Firefox), OpenAI oder Google – öffentlich einsehbar und von tausenden Fachleuten geprüft –, die wir zu fertigen Werkzeugen verbinden, um eigene Funktionen ergänzen und für Handy und Alltag optimieren.</p>
+  </div>
+  </section>
+
+  <section id="licenses" class="legal licenses hidden">
+    <a class="back" href="#">← Zurück</a>
+    <h2>Open Source &amp; Lizenzen</h2>
+    <p>Alle CMV Tools sind Open Source. Der vollständige Quellcode steht öffentlich auf GitHub unter der Lizenz AGPL-3.0 – jede und jeder kann nachprüfen, dass nichts hochgeladen wird.</p>
+    <div class="lic-links">
+      <a class="btn" href="https://github.com/maurocasellini/cmv-tools" target="_blank" rel="noopener noreferrer">Quellcode auf GitHub</a>
+      <a class="btn" href="https://github.com/maurocasellini/cmv-tools/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">Lizenz (AGPL-3.0)</a>
+    </div>
+    <h3>Verwendete Open-Source-Bausteine</h3>
+    <p>Diese Programme, Modelle und Schriften stecken in den Tools. Die Links führen jeweils zum Quellcode und zum vollständigen Lizenztext.</p>
+    <div class="lic-wrap"><table class="lic">
+      <thead><tr><th>Baustein</th><th>Version</th><th>Lizenz</th><th>Verwendet in</th></tr></thead>
+      <tbody id="lic-body" data-no-i18n></tbody>
+    </table></div>
+  </section>
+
+  <section id="about" class="legal hidden">
+    <a class="back" href="#">← Zurück</a>
+    <h2>Hinweise zu den Tools</h2>
+    <p>Alle Tools laufen vollständig in deinem Browser. Dateien werden nur im Arbeitsspeicher deines Geräts verarbeitet und nie an einen Server gesendet. Eine Content Security Policy verbietet den Seiten technisch, Verbindungen zu anderen Servern aufzubauen.</p>
+    <p>Die verwendeten Engines sind Open Source und werden von den Seiten selbst ausgeliefert – es werden keine Drittanbieter geladen, es gibt kein Tracking und keine Cookies.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <span class="foot-id"><a class="foot-brand" href="https://cmventures.xyz/" target="_blank" rel="noopener noreferrer"><img src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="92" height="21"></a><span>Tools</span></span>
+  <nav class="foot-links">
+    <a href="https://cmventures.xyz/data-protection.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+    <a href="https://cmventures.xyz/#impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
+    <a href="#about">Hinweise zu den Tools</a>
+    <a href="https://github.com/maurocasellini/cmv-tools" target="_blank" rel="noopener noreferrer">Quellcode</a>
+    <a href="#licenses">Open-Source-Lizenzen</a>
+  </nav>
+</footer>
+
+<script src="i18n-en.js"></script>
+<script src="shared/i18n.js"></script>
+<script src="shared/common.js"></script>
+<script src="hub.js"></script>
+</body>
+</html>

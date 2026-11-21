@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voice to Text</title>
+<meta name="description" content="Sprachnachrichten und Meetings transkribieren – direkt im Browser, ohne Upload.">
+<meta name="theme-color" content="#242b41">
+<script src="shared/theme.js"></script>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="shared/fonts/fonts.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="voice.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="cmv-home" href="https://cmventures.xyz/" title="CM Ventures" aria-label="CM Ventures – Startseite"><img class="cmv-logo on-light" src="shared/brand/cmv-logo.svg" alt="CM Ventures" width="131" height="30"><img class="cmv-logo on-dark" src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="131" height="30"></a>
+  <a class="brand" href="./">
+    <img class="logo-img" src="logo.svg" alt="" width="30" height="30"><span class="logo-word"><b>Voice</b> <em>to Text</em></span>
+  </a>
+  <span class="local-badge" title="Alle Dateien bleiben auf deinem Gerät. Nichts wird hochgeladen.">Kein Upload</span>
+  <div class="spacer"></div>
+  <a class="all-tools" data-tool-link="hub">Alle Tools</a>
+  <div class="lang-switch" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de">DE</button><button type="button" data-lang="en">EN</button></div>
+</header>
+
+<main>
+  <section id="start" class="view">
+    <div class="hero">
+      <div class="eyebrow accent">Transkription</div>
+      <div class="eyebrow">Sprachmemo · Meeting · Interview</div>
+      <h1>Gesprochenes wird <em>Text</em>.</h1>
+      <p>Sprachnachricht, Meeting-Aufnahme oder Video hineinziehen – oder direkt aufnehmen. Whisper schreibt mit, inklusive Zeitmarken. Alles läuft auf deinem Gerät.</p>
+      <div class="hero-actions">
+        <label class="btn primary">
+          <input id="file" type="file" accept="audio/*,video/*,.opus,.ogg,.oga,.m4a,.mp3,.wav,.webm,.mp4,.mov,.aac,.flac,.amr" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 15V4m0 0L7.5 8.5M12 4l4.5 4.5M4 15v5h16v-5"/></svg>
+          Datei wählen
+        </label>
+        <button id="rec" type="button" class="btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>
+          Aufnehmen
+        </button>
+      </div>
+      <ul class="facts">
+        <li>Whisper von OpenAI – läuft lokal im Browser</li>
+        <li>Deutsch, Englisch, Französisch, Italienisch &amp; mehr</li>
+        <li>Export als Text oder Untertitel (SRT/VTT)</li>
+      </ul>
+    </div>
+    <label class="drop" id="drop">
+      <strong>Audio- oder Videodatei hierher ziehen</strong>
+      <span>WhatsApp-Sprachnachricht, Memo, MP3, M4A, WAV, MP4 …</span>
+    </label>
+
+  <div class="how" id="how">
+    <div class="how-head">So funktioniert’s</div>
+    <h2>Spracherkennung, die nicht mithört.</h2>
+    <div class="how-grid">
+      <div class="how-card"><span class="n">01</span><h3>Das Modell: Whisper</h3><p>Whisper ist ein Spracherkennungs-Modell von OpenAI, der Firma hinter ChatGPT. OpenAI hat es frei veröffentlicht – jeder darf eine Kopie davon verwenden.</p></div>
+      <div class="how-card"><span class="n">02</span><h3>Die Kopie läuft bei dir</h3><p>Beim ersten Mal lädt dein Browser diese Kopie herunter (ca. 77 MB) und speichert sie. Danach hört dein Gerät selbst zu und schreibt mit. OpenAI bekommt davon nichts mit – es gibt keine Verbindung zu OpenAI.</p></div>
+      <div class="how-card"><span class="n">03</span><h3>Darum dauert es etwas</h3><p>Statt eines Rechenzentrums arbeitet dein Handy oder Laptop. Eine Minute Audio braucht je nach Gerät 10–40 Sekunden. Dafür bleibt jedes Wort bei dir.</p></div>
+    </div>
+    <p class="how-note">Ideal für vertrauliche Gespräche, Meetings oder Sprachnachrichten, die nicht in einer Cloud landen sollen.</p>
+  </div>
+  </section>
+
+  <!-- Recording -->
+  <section id="recording" class="view hidden">
+    <div class="rec-box">
+      <div class="eyebrow accent">Aufnahme läuft</div>
+      <div id="rec-time" class="rec-time">0:00</div>
+      <canvas id="rec-level" width="600" height="80"></canvas>
+      <div class="hero-actions center">
+        <button id="rec-stop" type="button" class="btn primary">■ Stopp &amp; transkribieren</button>
+        <button id="rec-cancel" type="button" class="btn">Verwerfen</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- File + settings + result -->
+  <section id="work" class="view hidden">
+    <div class="work-head">
+      <div>
+        <div class="eyebrow accent">Datei</div>
+        <h2 id="f-name" data-no-i18n></h2>
+        <p id="f-meta" class="muted"></p>
+      </div>
+      <audio id="player" controls preload="metadata"></audio>
+    </div>
+
+    <div id="settings" class="settings">
+      <label class="field"><span>Sprache</span>
+        <select id="language">
+          <option value="german">Deutsch</option>
+          <option value="english">Englisch</option>
+          <option value="french">Französisch</option>
+          <option value="italian">Italienisch</option>
+          <option value="spanish">Spanisch</option>
+          <option value="portuguese">Portugiesisch</option>
+          <option value="dutch">Niederländisch</option>
+        </select>
+      </label>
+      <label class="field"><span>Modell</span>
+        <select id="model">
+          <option value="base">Genau (Whisper Base, 77 MB)</option>
+          <option value="tiny">Schnell (Whisper Tiny, 41 MB)</option>
+        </select>
+      </label>
+      <button id="go" class="btn primary big">Transkribieren</button>
+      <p class="muted small">Das Modell wird beim ersten Mal geladen und danach im Browser gespeichert. Faustregel: eine Minute Audio braucht je nach Gerät 10–40 Sekunden.</p>
+    </div>
+
+    <div id="progress" class="progress hidden">
+      <div class="label" id="p-label">Modell wird geladen …</div>
+      <div class="bar"><i id="p-bar"></i></div>
+    </div>
+
+    <div id="result" class="result hidden">
+      <div class="result-bar">
+        <label class="check"><input id="ts" type="checkbox" checked> Zeitmarken</label>
+        <div class="spacer"></div>
+        <button id="copy" class="btn">Kopieren</button>
+        <button id="dl-txt" class="btn">.txt</button>
+        <button id="dl-srt" class="btn">.srt</button>
+        <button id="dl-vtt" class="btn">.vtt</button>
+      </div>
+      <div id="transcript" class="transcript" data-no-i18n></div>
+    </div>
+
+    <p class="restart"><button id="restart" class="link-btn">Andere Datei transkribieren</button></p>
+  </section>
+
+  <section id="about" class="view hidden legal">
+    <a class="back" href="#">← Zurück</a>
+    <h2>Hinweise zum Tool</h2>
+    <p>Die Transkription läuft vollständig in deinem Browser. Audio wird nur im Arbeitsspeicher deines Geräts verarbeitet und nie an einen Server gesendet – die Seite darf technisch keine Verbindung zu anderen Servern aufbauen (Content Security Policy). Mikrofon-Aufnahmen werden nicht gespeichert.</p>
+    <h3>Open Source</h3>
+    <p>Spracherkennung: Whisper von OpenAI (MIT), als ONNX-Modell ausgeführt mit Transformers.js (Apache 2.0) und ONNX Runtime Web (MIT). Formate, die der Browser nicht selbst lesen kann (z. B. WhatsApp-Sprachnachrichten auf dem iPhone), werden mit FFmpeg (LGPL/GPL) umgewandelt.</p>
+    <h3>Genauigkeit</h3>
+    <p>Whisper ist sehr gut, aber nicht fehlerfrei – besonders bei Dialekt, Fachbegriffen und Namen. Schweizerdeutsch wird in Hochdeutsch wiedergegeben. Wichtige Inhalte bitte gegenlesen.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <span class="foot-id"><a class="foot-brand" href="https://cmventures.xyz/" target="_blank" rel="noopener noreferrer"><img src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="92" height="21"></a><span>Voice to Text</span></span>
+  <nav class="foot-links">
+    <a href="https://cmventures.xyz/data-protection.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+    <a href="https://cmventures.xyz/#impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
+    <a href="#about">Hinweise zum Tool</a>
+    <a href="https://github.com/maurocasellini/cmv-tools/tree/master/voice" target="_blank" rel="noopener noreferrer">Quellcode</a>
+    <a data-tool-link="hub" data-hash="#licenses">Open-Source-Lizenzen</a>
+  </nav>
+</footer>
+
+<script src="i18n-en.js"></script>
+<script src="shared/i18n.js"></script>
+<script src="shared/common.js"></script>
+<script type="module" src="voice.js"></script>
+</body>
+</html>

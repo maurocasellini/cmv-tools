@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CM Ventures Blockchain Demo</title>
+<meta name="description" content="A blockchain you can touch: mine blocks, sign payments and watch every node check them, then trace deposits back to darknet markets, mixers and sanctions with Chain-Check. Runs entirely in the browser.">
+<meta name="theme-color" content="#242b41">
+<script src="shared/theme.js"></script>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="shared/fonts/fonts.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="https://cmventures.xyz/" title="CM Ventures" aria-label="CM Ventures – home">
+    <img class="cmv-logo on-light" src="shared/brand/cmv-logo.svg" alt="CM Ventures" width="149" height="34"><img class="cmv-logo on-dark" src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="149" height="34"><span class="logo-word"><em>Blockchain Demo</em></span>
+  </a>
+  <span class="local-badge">Learning tool</span>
+  <div class="spacer"></div>
+  <a class="all-tools" data-tool-link="hub">All tools</a>
+  <span data-theme-slot></span>
+</header>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="eyebrow">Learning tool · Blockchain</div>
+      <h1>How a blockchain <em>really</em> works.</h1>
+      <p>A live network running in your browser. The coins (SIM) are simulated and have no value.</p>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Mode">
+        <button type="button" data-mode="teach" aria-pressed="true">Teaching</button>
+        <button type="button" data-mode="sim" aria-pressed="false">Simulation</button>
+        <button type="button" data-mode="compliance" aria-pressed="false">Compliance</button>
+      </div>
+      <button id="btnRun" type="button">Pause</button>
+      <label class="ctl" for="difficulty">Difficulty
+        <select id="difficulty">
+          <option value="2">2 zeros</option>
+          <option value="3">3 zeros</option>
+          <option value="4">4 zeros</option>
+          <option value="5">5 zeros</option>
+        </select>
+      </label>
+      <label class="ctl" for="hashrate">Hash power
+        <input id="hashrate" type="range" min="250" max="10000" step="250" value="1500">
+        <output id="hashrateOut" class="num">1,500 H/s</output>
+      </label>
+      <label class="ctl" for="delay">Network delay
+        <input id="delay" type="range" min="200" max="5000" step="100" value="1600">
+        <output id="delayOut" class="num">1.6 s</output>
+      </label>
+      <label class="ctl" for="autoTx"><input id="autoTx" type="checkbox"> Random payments</label>
+      <button id="btnAdd" type="button">Add node</button>
+      <button id="btnReset" type="button">Reset</button>
+    </div>
+  </header>
+
+  <div id="simView">
+  <section class="panel" id="lessonPanel" aria-label="Lesson">
+    <div class="lesson">
+      <div class="sub">
+        <h2>Lesson: one payment from start to finish</h2>
+        <ol class="steps" id="steps"></ol>
+      </div>
+      <div class="narr" role="status" aria-live="polite">
+        <div class="kicker" id="narrKicker">What just happened</div>
+        <div class="body" id="narrBody"></div>
+        <div class="checks" id="narrChecks"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid-main">
+    <section class="panel net" aria-label="Peer-to-peer network">
+      <div class="panel-head">
+        <h2>Network</h2>
+        <div class="legend">
+          <span><i style="background:var(--tx)"></i>Transaction</span>
+          <span><i style="background:var(--accent)"></i>Block</span>
+          <span><i style="background:var(--sync)"></i>Chain sync</span>
+          <span><i style="background:var(--ok)"></i>Checked ✓</span>
+        </div>
+      </div>
+      <svg id="svg" viewBox="0 0 640 390" role="img" aria-label="Network of nodes"></svg>
+      <p class="note">Click a node to open its wallet. Click a connection to cut it, and click again to restore it. A spinning ring means the node is mining. A green ✓ appears when a node has checked a transaction or block and accepted it, a red ✗ when it rejected it.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Node</th><th>Status</th><th class="num">Height</th><th>Chain tip</th><th class="num">Mempool</th><th class="num">Balance</th><th>Consensus</th></tr></thead>
+          <tbody id="consensus"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Selected node">
+      <div class="who"><h3 id="nName">Bob</h3><span id="nPills" class="row"></span></div>
+      <div class="addr"><span class="muted">Next receive address</span><code id="nAddr"></code><button id="btnCopy" type="button">Copy</button></div>
+      <div class="row">
+        <button id="btnMine" type="button" class="primary">Mine a block</button>
+        <button id="btnOnline" type="button">Go offline</button>
+      </div>
+      <div class="balrow">
+        <div><div class="muted">Confirmed balance</div><span class="big num" id="nBal">0</span><span class="unit">SIM</span></div>
+        <div><div class="muted">Pending</div><span class="num" id="nPend">0</span></div>
+      </div>
+      <div class="hashbox" id="hashbox">
+        <div class="muted" id="hashLabel">Mining is off</div>
+        <div class="h" id="hashLive">–</div>
+        <div class="contents" id="hashContents"></div>
+      </div>
+      <hr>
+      <form class="send" id="sendForm" autocomplete="off">
+        <label for="sendTo">Send to<select id="sendTo"></select></label>
+        <label for="sendAmt">Amount<input id="sendAmt" type="number" min="1" step="1" value="30" inputmode="numeric"></label>
+        <label for="sendFee">Fee<input id="sendFee" type="number" min="0" step="1" value="1" inputmode="numeric"></label>
+        <div class="act">
+          <button class="primary" type="submit">Sign &amp; broadcast</button>
+          <button id="btnDouble" type="button" title="Spend the same coin twice, sent to two different peers">Try a double spend</button>
+          <span class="msg" id="sendMsg" role="status"></span>
+        </div>
+      </form>
+      <hr>
+      <div class="sub">
+        <h2>Coins in this wallet (UTXOs)</h2>
+        <div class="list" id="nUtxo"></div>
+      </div>
+      <div class="sub">
+        <h2 id="poolTitle">Mempool of this node</h2>
+        <div class="list" id="nPool"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel" aria-label="Blockchain">
+    <div class="panel-head">
+      <h2 id="chainTitle">Blockchain as seen by Bob</h2>
+      <span class="note">Newest block on the left. Each block points to the one before it. Click a block to inspect it.</span>
+    </div>
+    <div class="chain" id="chain"></div>
+  </section>
+
+  <section class="panel" aria-label="Who owns what">
+    <div class="panel-head">
+      <h2 id="ownersTitle">Who owns what: the UTXO set</h2>
+      <span class="note">Every unspent coin, grouped by owner. A balance is the sum of a person's coins. Click a coin to see where it came from.</span>
+    </div>
+    <div class="owners" id="owners"></div>
+  </section>
+
+  <div class="grid-main">
+    <section class="panel" aria-label="Event log">
+      <div class="panel-head"><h2>Event log</h2><button id="btnClear" type="button">Clear</button></div>
+      <div class="log" id="log"></div>
+    </section>
+    <section class="panel" aria-label="Things to try">
+      <h2>Things to try</h2>
+      <ol class="try">
+        <li>Send coins from one node to another and follow the blue dot as the transaction spreads.</li>
+        <li>Let two nodes mine at the same time and watch who wins the block.</li>
+        <li>Take a node offline, let it mine alone, then bring it back. Its short fork gets replaced by the longer chain.</li>
+        <li>Cut two connections to split the network in half. Both halves keep going until you reconnect them.</li>
+        <li>Press “Try a double spend” and see which of the two payments ends up in a block.</li>
+        <li>Open a block and change its nonce. The hash changes and the proof of work breaks.</li>
+      </ol>
+    </section>
+  </div>
+
+  <section class="panel" aria-label="How it works">
+    <h2>How it works</h2>
+    <div class="learn">
+      <div><h3>Keys and addresses</h3><p>Every wallet holds real ECDSA key pairs (P-256). An address is the SHA-256 hash of a public key, shortened. Wallets use a new address for every coin they receive, so one person usually owns several addresses.</p></div>
+      <div><h3>Coins are UTXOs</h3><p>The chain stores no account balances. It only stores unspent outputs (UTXOs) of earlier transactions. Your balance is the sum of all UTXOs your keys can unlock.</p></div>
+      <div><h3>Transactions</h3><p>A payment spends whole coins as inputs and creates new outputs: one for the receiver and one for the change. Each input is signed with the key that owns it. Inputs minus outputs is the fee.</p></div>
+      <div><h3>Checking</h3><p>Every node checks every transaction on its own: is the signature valid, does the signer own the coin, is the coin still unspent, do the inputs cover the outputs? Only then does it keep it in its mempool and pass it on.</p></div>
+      <div><h3>Mining</h3><p>A miner packs transactions from its mempool into a block and tries nonce after nonce until the block's SHA-256 hash starts with enough zeros. The first transaction pays the miner 100 SIM plus all fees.</p></div>
+      <div><h3>Consensus</h3><p>Each block contains the hash of the previous block, so blocks form a chain. Nodes follow the chain with the most work. If two blocks compete, the next block decides, and the losing block's transactions go back to the mempool.</p></div>
+    </div>
+  </section>
+  </div>
+
+  <div id="ccView" hidden>
+    <section class="panel cc-intro" aria-label="Chain-Check">
+      <div class="cc-brandrow">
+        <div class="cc-brand"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M10.5 3.5a7 7 0 1 0 4.4 12.4l4.6 4.6 1.6-1.6-4.6-4.6A7 7 0 0 0 10.5 3.5Zm0 2.3a4.7 4.7 0 1 1 0 9.4 4.7 4.7 0 0 1 0-9.4Z" fill="currentColor"/><path d="M8 10.6h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><strong>Chain-Check</strong><span>Blockchain analytics for compliance teams · simulated</span></div>
+        <button type="button" id="ccNew">Generate a new chain</button>
+      </div>
+      <p class="cc-lead">You are the compliance officer at <b>Nordstern Exchange</b>. Every bitcoin that customers deposit has a history. Chain-Check follows each coin backwards through every earlier transaction, down to the block in which it was mined, and checks whether it passed through a darknet market, a mixer, a ransomware wallet, a scam, a hack or a sanctioned exchange.</p>
+      <div class="cc-prog" id="ccProg"><div class="cc-pbar"><i></i></div><span>Preparing …</span></div>
+      <div class="cc-stats" id="ccStats"></div>
+      <p class="note" id="ccBuilt"></p>
+    </section>
+
+    <div id="ccMain" hidden>
+      <div class="cc-grid">
+        <aside class="panel cc-side" aria-label="Cases and alerts">
+          <div class="sub"><h2>Training cases</h2><div class="cc-list" id="ccCases"></div></div>
+          <div class="sub">
+            <h2>Alert queue · deposits 2023–2024</h2>
+            <div class="cc-filters" role="group" aria-label="Filter by risk">
+              <button type="button" data-ccf="alerts">Alerts <small></small></button>
+              <button type="button" data-ccf="severe">Severe <small></small></button>
+              <button type="button" data-ccf="high">High <small></small></button>
+              <button type="button" data-ccf="medium">Medium <small></small></button>
+              <button type="button" data-ccf="low">Low <small></small></button>
+              <button type="button" data-ccf="all">All <small></small></button>
+            </div>
+            <label class="cc-search" for="ccSearch"><span class="sr">Search</span><input id="ccSearch" type="search" placeholder="Search txid, address or source" autocomplete="off"></label>
+            <div class="cc-list cc-queue" id="ccQueue"></div>
+          </div>
+        </aside>
+        <section class="panel cc-case" id="ccCase" aria-live="polite"></section>
+      </div>
+
+      <section class="panel" aria-label="Attribution database">
+        <div class="panel-head"><h2>What Chain-Check knows: the attribution database</h2><span class="note">Services whose addresses are known. Names marked historical refer to real, publicly reported services; all addresses and flows here are invented.</span></div>
+        <div class="tbl-wrap"><table class="cc-ent"><thead><tr><th>Service</th><th>Category</th><th class="num">Addresses</th><th class="num">BTC received</th><th class="num">Active</th><th>About</th></tr></thead><tbody id="ccEntities"></tbody></table></div>
+      </section>
+
+      <section class="panel" aria-label="How Chain-Check works">
+        <h2>How Chain-Check works</h2>
+        <div class="learn">
+          <div><h3>1 · Attribution</h3><p>Analytics firms collect addresses that belong to known services: from seizures, court files, sanctions lists, test payments and their own investigations. Chain-Check has such a database for this chain.</p></div>
+          <div><h3>2 · Clustering</h3><p>When several addresses are spent together in one transaction, one person holds all their keys. This common-input heuristic groups thousands of addresses into wallets.</p></div>
+          <div><h3>3 · Tracing</h3><p>Chain-Check walks backwards from the deposit. At every transaction it splits the value over the inputs in proportion to their size (the haircut method) and stops at the first known service.</p></div>
+          <div><h3>4 · Exposure</h3><p>Direct exposure means the coins came straight from a risky service. Indirect exposure means there are hops in between. The closer and the larger the share, the higher the risk.</p></div>
+          <div><h3>5 · Behaviour</h3><p>Some patterns are suspicious by themselves: peel chains, money racing through many wallets, coins that wake up after years, and deposits split to stay under a limit (structuring).</p></div>
+          <div><h3>6 · Decision</h3><p>Low risk is accepted. Medium triggers questions about the source of funds. High means holding the deposit for due diligence. Severe means freezing it and reporting to the financial intelligence unit, without warning the customer.</p></div>
+          <div><h3>Limits</h3><p>Mixers, privacy coins and swaps to other chains break the trail. A trace is evidence, not proof: almost every old coin has touched something bad, which is why share and distance matter.</p></div>
+          <div><h3>In real life</h3><p>Tools such as Chainalysis, Elliptic or TRM Labs work this way at scale. In the EU, crypto service providers must also collect sender and receiver data for every transfer (Travel Rule) and report suspicious activity.</p></div>
+        </div>
+        <p class="note">Chain-Check is a teaching model. Scores, rules and thresholds are simplified and illustrative.</p>
+      </section>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">
+  <span class="foot-id"><a class="foot-brand" href="https://cmventures.xyz/" target="_blank" rel="noopener noreferrer"><img src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="92" height="21"></a><span>Blockchain Demo</span></span>
+  <nav class="foot-links">
+    <a href="https://cmventures.xyz/data-protection.html" target="_blank" rel="noopener noreferrer">Privacy</a>
+    <a href="https://cmventures.xyz/#impressum" target="_blank" rel="noopener noreferrer">Legal notice</a>
+    <a data-tool-link="hub">All tools</a>
+    <a href="https://github.com/maurocasellini/cmv-tools/tree/master/blockchaindemo" target="_blank" rel="noopener noreferrer">Source code</a>
+    <a data-tool-link="hub" data-hash="#licenses">Open-source licenses</a>
+  </nav>
+</footer>
+
+<dialog id="startDlg">
+  <div class="start">
+    <div class="sub">
+      <img class="cmv-logo on-light" src="shared/brand/cmv-logo.svg" alt="CM Ventures" width="175" height="40" style="height:40px"><img class="cmv-logo on-dark" src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="175" height="40" style="height:40px">
+      <h1>Blockchain Demo</h1>
+      <p class="lead">A small blockchain network that runs in your browser. Choose how you want to use it. You can switch at any time with the toggle at the top.</p>
+    </div>
+    <div class="choices">
+      <button type="button" class="choice primary" data-start="teach"><strong>Teaching mode</strong><span>Nothing happens by itself. You mine each block and sign each payment by hand, and the page explains every step. Best for a lecture.</span></button>
+      <button type="button" class="choice" data-start="sim"><strong>Start simulation</strong><span>The network runs on its own. Miners compete, random payments flow, forks appear and resolve.</span></button>
+      <button type="button" class="choice" data-start="compliance"><strong>Compliance mode</strong><span>A chain with hundreds of thousands of transactions. Chain-Check traces deposits back to darknet markets, mixers, ransomware and sanctions.</span></button>
+    </div>
+  </div>
+</dialog>
+<dialog id="dlg"><div class="dlg" id="dlgBody"></div></dialog>
+
+<script src="shared/common.js"></script>
+<script src="app.js"></script>
+<script src="compliance.js"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QR Codes</title>
+<meta name="description" content="QR-Codes für Links, WLAN und Visitenkarten – im eigenen Design, als PNG oder SVG. Im Browser, ohne Upload.">
+<meta name="theme-color" content="#242b41">
+<script src="shared/theme.js"></script>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="shared/fonts/fonts.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="qr.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="cmv-home" href="https://cmventures.xyz/" title="CM Ventures" aria-label="CM Ventures – Startseite"><img class="cmv-logo on-light" src="shared/brand/cmv-logo.svg" alt="CM Ventures" width="131" height="30"><img class="cmv-logo on-dark" src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="131" height="30"></a>
+  <a class="brand" href="./">
+    <img class="logo-img" src="logo.svg" alt="" width="30" height="30"><span class="logo-word"><b>QR</b> <em>Codes</em></span>
+  </a>
+  <span class="local-badge" title="Alle Daten bleiben auf deinem Gerät. Nichts wird hochgeladen.">Kein Upload</span>
+  <div class="spacer"></div>
+  <a class="all-tools" data-tool-link="hub">Alle Tools</a>
+  <div class="lang-switch" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de">DE</button><button type="button" data-lang="en">EN</button></div>
+</header>
+
+<main>
+  <section id="home" class="view">
+    <div class="hero slim">
+      <div class="eyebrow accent">QR-Codes</div>
+      <h1>QR-Codes im <em>eigenen Look</em>.</h1>
+      <p>Für Links, WLAN-Zugang, Visitenkarten und mehr – mit deinen Farben und deinem Logo. Ohne Konto, ohne Tracking-Weiterleitung: Der Code enthält genau deinen Inhalt.</p>
+    </div>
+
+    <div class="qr-grid">
+      <div class="editor">
+        <div class="types" role="tablist">
+          <button type="button" data-type="url" class="active">Link</button>
+          <button type="button" data-type="wifi">WLAN</button>
+          <button type="button" data-type="vcard">Kontakt</button>
+          <button type="button" data-type="email">E-Mail</button>
+          <button type="button" data-type="tel">Telefon</button>
+          <button type="button" data-type="text">Text</button>
+        </div>
+
+        <div class="form" data-form="url">
+          <label class="field"><span>Adresse (URL)</span><input id="url" type="text" inputmode="url" placeholder="https://cmventures.xyz" value="https://cmventures.xyz" data-no-i18n></label>
+        </div>
+        <div class="form" data-form="wifi" hidden>
+          <label class="field"><span>Netzwerkname (SSID)</span><input id="ssid" type="text" autocomplete="off" data-no-i18n></label>
+          <label class="field"><span>Passwort</span><input id="wpass" type="text" autocomplete="off" data-no-i18n></label>
+          <div class="two">
+            <label class="field"><span>Verschlüsselung</span><select id="wsec"><option value="WPA">WPA / WPA2 / WPA3</option><option value="WEP">WEP</option><option value="nopass">Keine</option></select></label>
+            <label class="check inline"><input id="whidden" type="checkbox"> Verstecktes Netzwerk</label>
+          </div>
+          <p class="note">Beim Scannen verbindet sich das Handy direkt mit dem WLAN – praktisch für Gäste.</p>
+        </div>
+        <div class="form" data-form="vcard" hidden>
+          <div class="two">
+            <label class="field"><span>Vorname</span><input id="v-first" type="text" data-no-i18n></label>
+            <label class="field"><span>Nachname</span><input id="v-last" type="text" data-no-i18n></label>
+          </div>
+          <div class="two">
+            <label class="field"><span>Firma</span><input id="v-org" type="text" data-no-i18n></label>
+            <label class="field"><span>Funktion</span><input id="v-title" type="text" data-no-i18n></label>
+          </div>
+          <div class="two">
+            <label class="field"><span>Telefon</span><input id="v-tel" type="tel" data-no-i18n></label>
+            <label class="field"><span>E-Mail</span><input id="v-mail" type="email" data-no-i18n></label>
+          </div>
+          <label class="field"><span>Website</span><input id="v-url" type="text" inputmode="url" data-no-i18n></label>
+          <label class="field"><span>Adresse</span><input id="v-adr" type="text" placeholder="Strasse, PLZ Ort, Land" data-no-i18n></label>
+        </div>
+        <div class="form" data-form="email" hidden>
+          <label class="field"><span>E-Mail-Adresse</span><input id="m-to" type="email" data-no-i18n></label>
+          <label class="field"><span>Betreff</span><input id="m-sub" type="text" data-no-i18n></label>
+          <label class="field"><span>Nachricht</span><textarea id="m-body" rows="3" data-no-i18n></textarea></label>
+        </div>
+        <div class="form" data-form="tel" hidden>
+          <label class="field"><span>Telefonnummer</span><input id="tel" type="tel" placeholder="+423 …" data-no-i18n></label>
+        </div>
+        <div class="form" data-form="text" hidden>
+          <label class="field"><span>Text</span><textarea id="text" rows="4" data-no-i18n></textarea></label>
+        </div>
+
+        <details class="design" open>
+          <summary>Design</summary>
+          <div class="two">
+            <label class="field"><span>Farbe</span><input id="fg" type="color" value="#242b41"></label>
+            <label class="field"><span>Hintergrund</span><input id="bg" type="color" value="#ffffff"></label>
+          </div>
+          <label class="check"><input id="transparent" type="checkbox"> Transparenter Hintergrund</label>
+          <div class="field"><span>Punkte</span>
+            <div class="seg" id="dots"><button type="button" data-v="square" class="active">Quadrat</button><button type="button" data-v="rounded">Abgerundet</button><button type="button" data-v="dots">Punkte</button></div>
+          </div>
+          <div class="field"><span>Ecken</span>
+            <div class="seg" id="eyes"><button type="button" data-v="square" class="active">Eckig</button><button type="button" data-v="rounded">Rund</button><button type="button" data-v="accent">Akzentfarbe</button></div>
+          </div>
+          <label class="field" id="accent-field" hidden><span>Akzentfarbe</span><input id="accent" type="color" value="#af6217"></label>
+          <div class="field"><span>Logo in der Mitte</span>
+            <div class="logo-row">
+              <label class="btn small"><input id="logo" type="file" accept="image/*" hidden>Bild wählen</label>
+              <button type="button" id="logo-rm" class="btn small" hidden>Entfernen</button>
+            </div>
+          </div>
+          <label class="field"><span>Fehlerkorrektur</span>
+            <select id="ecl">
+              <option value="M">Mittel (15 %)</option>
+              <option value="Q">Hoch (25 %)</option>
+              <option value="H">Sehr hoch (30 %) – für Logos</option>
+              <option value="L">Niedrig (7 %) – kleinster Code</option>
+            </select>
+          </label>
+        </details>
+      </div>
+
+      <div class="preview">
+        <div class="qr-box" id="qr-box"></div>
+        <p id="qr-info" class="muted small center"></p>
+        <div class="dl">
+          <button id="png" class="btn primary">PNG</button>
+          <button id="svg" class="btn">SVG</button>
+          <button id="share" class="btn hidden">Teilen</button>
+        </div>
+        <p class="note">Tipp: Vor dem Drucken einmal mit dem Handy testen – vor allem mit Logo oder hellen Farben.</p>
+      </div>
+    </div>
+
+  <div class="how" id="how">
+    <div class="how-head">So funktioniert’s</div>
+    <h2>Ein QR-Code ohne Haken.</h2>
+    <div class="how-grid">
+      <div class="how-card"><span class="n">01</span><h3>Nur dein Inhalt</h3><p>Der Code enthält genau das, was du eingibst – deinen Link, dein WLAN, deine Kontaktdaten. Kein Umweg über fremde Kurzlinks.</p></div>
+      <div class="how-card"><span class="n">02</span><h3>Funktioniert für immer</h3><p>Viele QR-Dienste zählen Scans über eigene Weiterleitungen – endet das Abo, ist der gedruckte Code tot. Dieser Code braucht keinen Dienst und funktioniert, solange es QR-Codes gibt.</p></div>
+      <div class="how-card"><span class="n">03</span><h3>Ein kleines Open-Source-Programm</h3><p>Den Code berechnet ein frei verfügbares Programm (qrcode-generator von Kazuhiko Arase) direkt in deinem Browser. WLAN-Passwörter und Kontaktdaten verlassen dein Gerät nie.</p></div>
+    </div>
+    <p class="how-note">Tipp: Vor dem Drucken einmal mit dem Handy scannen – besonders mit Logo oder hellen Farben.</p>
+  </div>
+  </section>
+
+  <section id="about" class="view hidden legal">
+    <a class="back" href="#">← Zurück</a>
+    <h2>Hinweise zum Tool</h2>
+    <p>Die QR-Codes werden direkt in deinem Browser erzeugt. Eingaben wie WLAN-Passwörter oder Kontaktdaten verlassen dein Gerät nie – die Seite darf technisch keine Verbindung zu anderen Servern aufbauen (Content Security Policy).</p>
+    <h3>Keine Weiterleitung</h3>
+    <p>Viele QR-Dienste leiten über eigene Kurzlinks, um Scans zu zählen – und der Code funktioniert nicht mehr, wenn das Abo endet. Hier enthält der Code genau deinen Inhalt und funktioniert für immer.</p>
+    <h3>Open Source</h3>
+    <p>QR-Code-Erzeugung: qrcode-generator von Kazuhiko Arase (MIT). „QR Code“ ist eine eingetragene Marke der DENSO WAVE INCORPORATED.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <span class="foot-id"><a class="foot-brand" href="https://cmventures.xyz/" target="_blank" rel="noopener noreferrer"><img src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="92" height="21"></a><span>QR Codes</span></span>
+  <nav class="foot-links">
+    <a href="https://cmventures.xyz/data-protection.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+    <a href="https://cmventures.xyz/#impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
+    <a href="#about">Hinweise zum Tool</a>
+    <a href="https://github.com/maurocasellini/cmv-tools/tree/master/qr" target="_blank" rel="noopener noreferrer">Quellcode</a>
+    <a data-tool-link="hub" data-hash="#licenses">Open-Source-Lizenzen</a>
+  </nav>
+</footer>
+
+<script src="i18n-en.js"></script>
+<script src="shared/i18n.js"></script>
+<script src="shared/common.js"></script>
+<script type="module" src="qr.js"></script>
+</body>
+</html>

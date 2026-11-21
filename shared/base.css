@@ -1,0 +1,194 @@
+/* CM Ventures Tools – shared visual style (cream, navy, copper; serif headings, mono labels) */
+:root {
+  --bg: #f1f1ec; --panel: #f6f6f2; --sand: #e8e6df; --text: #242b41; --muted: #5d6275; --line: #d8d6cd;
+  --accent: #995c2c; --accent-2: #7f4a22; --navy: #242b41; --navy-2: #2d3550; --on-navy: #f1f1ec; --ok: #4d7a52; --err: #a23b2a;
+  --serif: "Source Serif 4", "Iowan Old Style", Charter, Georgia, serif;
+  --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  --mono: "IBM Plex Mono", "SF Mono", Menlo, Consolas, monospace;
+  --radius: 2px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #1d2336; --panel: #242b41; --sand: #2d3550; --text: #f1f1ec; --muted: #a9adbb; --line: #3a4260;
+    --accent: #c47d45; --accent-2: #d58f57; --navy: #151a2a; --navy-2: #242b41; --err: #e07a62; color-scheme: dark; } }
+:root[data-theme="dark"] { --bg: #1d2336; --panel: #242b41; --sand: #2d3550; --text: #f1f1ec; --muted: #a9adbb; --line: #3a4260;
+    --accent: #c47d45; --accent-2: #d58f57; --navy: #151a2a; --navy-2: #242b41; --err: #e07a62; color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body { font: 15px/1.6 var(--sans); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased;
+  min-height: 100vh; display: flex; flex-direction: column; }
+.hidden, [hidden] { display: none !important; }
+button, select, input, textarea { font: inherit; color: inherit; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -.01em; }
+em { font-style: italic; color: var(--accent); }
+a { color: var(--accent); }
+
+/* Buttons: square, mono caps */
+button { cursor: pointer; border: 1px solid var(--line); background: transparent; border-radius: var(--radius); padding: 7px 12px; }
+button:hover { border-color: var(--text); }
+button:disabled { opacity: .45; cursor: default; }
+.btn, .primary { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+.btn { display: inline-flex; gap: 8px; justify-content: center; align-items: center; text-decoration: none; color: inherit;
+  border: 1px solid var(--line); background: transparent; border-radius: var(--radius); padding: 12px 20px; cursor: pointer; }
+.btn:hover { border-color: var(--text); }
+.primary { background: var(--accent); border-color: var(--accent); color: #fff !important; }
+.primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
+.btn svg { width: 18px; height: 18px; flex: none; }
+.big { width: 100%; padding: 15px 18px; }
+.muted { color: var(--muted); }
+.spacer { flex: 1; }
+input[type=text], input[type=number], input[type=search], select, textarea {
+  width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg);
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+label.check { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+label.check input { margin-top: 4px; accent-color: var(--accent); }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field > span, .label { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+/* Header */
+.topbar { position: sticky; top: 0; z-index: 20; height: 60px; display: flex; align-items: center; gap: 18px; padding: 0 28px;
+  background: var(--bg); border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); min-width: 0; }
+.logo-img { width: 30px; height: 30px; display: block; border-radius: 7px; flex: none; }
+.logo-word { font-family: var(--serif); font-size: 21px; letter-spacing: -.005em; white-space: nowrap; }
+.logo-word b { font-weight: 500; }
+.logo-word em { color: var(--accent); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .logo-img { box-shadow: 0 0 0 1px var(--line); } }
+:root[data-theme="dark"] .logo-img { box-shadow: 0 0 0 1px var(--line); }
+.local-badge { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+  border-left: 1px solid var(--line); padding-left: 14px; white-space: nowrap; }
+.local-badge::before { content: "— "; color: var(--accent); }
+.all-tools { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-decoration: none; white-space: nowrap; }
+.all-tools:hover { color: var(--accent); }
+.lang-switch { display: inline-flex; border: 1px solid var(--line); flex: none; }
+.lang-switch button { border: none; border-radius: 0; padding: 6px 10px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--muted); background: transparent; }
+.lang-switch button.active { background: var(--accent); color: #fff; }
+.lang-switch button:not(.active):hover { color: var(--text); }
+@media (max-width: 640px) {
+  .topbar { padding: 0 16px; gap: 12px; }
+  .local-badge, .all-tools { display: none; }
+  .logo-word { font-size: 19px; }
+}
+
+main { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 28px 80px; flex: 1; }
+@media (max-width: 640px) { main { padding: 0 16px 64px; } }
+
+/* Hero */
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.eyebrow.accent { color: var(--accent); margin-bottom: 4px; }
+.hero { padding: 64px 0 28px; max-width: 760px; }
+.hero h1 { font-size: clamp(34px, 5.2vw, 58px); line-height: 1.08; margin: 22px 0 18px; }
+.hero p { color: var(--muted); font-size: 17px; margin: 0 0 28px; max-width: 600px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+@media (max-width: 640px) { .hero { padding: 36px 0 20px; } .hero-actions .btn { flex: 1 1 100%; } }
+.facts { list-style: none; padding: 0; margin: 36px 0 0; max-width: 560px; }
+.facts li { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+  padding: 11px 0; border-top: 1px solid var(--line); }
+.facts li:last-child { border-bottom: 1px solid var(--line); }
+.facts li::before { content: "— "; color: var(--accent); }
+.cat { display: flex; align-items: center; gap: 14px; margin: 56px 0 20px; font-family: var(--mono); font-weight: 500;
+  font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--text); }
+.cat .num { color: var(--accent); }
+.cat::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+/* Drop zone, small helpers */
+.drop { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 180px; margin-top: 28px;
+  border: 1px dashed #b9b6aa; background: var(--panel); cursor: pointer; text-align: center; padding: 20px; transition: .15s; }
+.drop strong { font-family: var(--serif); font-weight: 400; font-size: 24px; }
+.drop span { color: var(--muted); }
+.drop.over { border-color: var(--accent); background: var(--sand); }
+@media (hover: none) { .drop { display: none; } }
+.restart { margin-top: 26px; }
+.link-btn { background: none; border: none; padding: 0; color: var(--muted); font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+.link-btn:hover { color: var(--accent); }
+.small { font-size: 13px; }
+.hero-actions.center { justify-content: center; }
+
+/* Legal / about */
+.legal { max-width: 720px; padding: 40px 0 20px; }
+.legal h2 { font-size: 42px; margin: 14px 0 18px; line-height: 1.1; }
+.legal h3 { font-size: 22px; margin: 28px 0 6px; }
+.legal p, .legal li { color: var(--muted); font-size: 16px; margin: 0 0 12px; }
+.back { background: none; border: none; padding: 0; color: var(--muted); font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; }
+.back:hover { color: var(--accent); }
+
+/* Footer */
+.foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 22px 28px; background: var(--navy); color: #a9adbb;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+.foot > span:first-child { color: var(--on-navy); }
+.foot-links { display: flex; gap: 6px 0; flex-wrap: wrap; }
+/* separators between links; the one at the start of each line is clipped away */
+.foot-links { margin-left: -33px; clip-path: inset(0 0 0 33px); }
+.foot-links a::before { content: ""; display: inline-block; width: 1px; height: 11px; margin: 0 16px; background: #4a5372; vertical-align: -1px; }
+.foot-links a { color: inherit; text-decoration: none; }
+.foot-links a:hover { color: var(--on-navy); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 640px) { .foot { padding: 20px 16px; } }
+
+/* Toast, busy overlay, progress */
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 60; max-width: calc(100% - 32px);
+  background: var(--navy); color: var(--on-navy); padding: 12px 18px; font-size: 14px; box-shadow: 0 8px 30px rgba(0,0,0,.25); }
+.toast.err { background: var(--err); color: #fff; }
+.busy { position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; gap: 16px; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(3px); text-align: center; padding: 24px; }
+.busy span { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); max-width: 420px; }
+.spinner { width: 34px; height: 34px; border: 3px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.bar { width: min(320px, 80vw); height: 3px; background: var(--line); }
+.bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+
+/* CM Ventures logo */
+.cmv-logo { height: 38px; width: auto; display: block; }
+.brand picture { display: block; flex: none; }
+.foot-id { display: inline-flex; align-items: center; gap: 14px; color: var(--on-navy); }
+.foot-brand { display: inline-flex; }
+.foot-brand img { height: 21px; width: auto; display: block; }
+.foot-id > span { border-left: 1px solid #4a5372; padding-left: 14px; }
+@media (max-width: 640px) { .cmv-logo { height: 24px; } }
+
+/* Light / dark toggle in the header */
+.theme-toggle { display: inline-grid; place-items: center; width: 32px; height: 30px; padding: 0; flex: none; color: var(--muted); border: 1px solid var(--line); background: transparent; }
+.theme-toggle:hover { color: var(--text); border-color: var(--text); }
+/* CM Ventures logo: the light version on dark backgrounds */
+.cmv-logo.on-dark { display: none; }
+:root[data-theme="dark"] .cmv-logo.on-light { display: none; }
+:root[data-theme="dark"] .cmv-logo.on-dark { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .cmv-logo.on-light { display: none; }
+  :root:not([data-theme="light"]) .cmv-logo.on-dark { display: block; }
+}
+
+/* Header never overlaps: the brand shrinks, the controls keep their size */
+.brand { flex-shrink: 1; overflow: hidden; }
+.lang-switch, .theme-toggle { flex-shrink: 0; }
+@media (max-width: 640px) { .brand .logo-word { font-size: 18px; } .topbar { gap: 10px; } }
+
+/* "So funktioniert's" – plain-language explanation on every tool */
+.how { margin: 56px 0 8px; }
+.how-head { display: flex; align-items: center; gap: 14px; font-family: var(--mono); font-weight: 500; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 8px; }
+.how-head::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.how h2 { font-size: clamp(26px, 3.4vw, 36px); margin: 6px 0 22px; line-height: 1.15; max-width: 760px; }
+.how-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+@media (max-width: 860px) { .how-grid { grid-template-columns: 1fr; } }
+.how-card { padding: 22px 22px 20px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.how-card .n { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .14em; }
+.how-card h3 { font-size: 21px; margin: 6px 0 8px; line-height: 1.25; }
+.how-card p { margin: 0 0 8px; color: var(--muted); font-size: 15px; }
+.how-card p:last-child { margin-bottom: 0; }
+.how-card b { color: var(--text); font-weight: 500; }
+.how-note { margin: 18px 0 0; padding: 14px 18px; background: var(--panel); border-left: 3px solid var(--accent); color: var(--muted); font-size: 15px; max-width: 900px; }
+.how-note b { color: var(--text); font-weight: 500; }
+
+/* CM Ventures logo in front of every tool name */
+.cmv-home { display: flex; align-items: center; flex: none; padding-right: 16px; border-right: 1px solid var(--line); }
+.cmv-home .cmv-logo { height: 30px; }
+@media (max-width: 640px) {
+  .cmv-home { padding-right: 10px; }
+  .cmv-home .cmv-logo { height: 20px; }
+  .cmv-home + .brand .logo-img { display: none; }
+  .cmv-home + .brand .logo-word { font-size: 17px; }
+}
+
+/* Hub: "Tools" next to the logo links to the hub itself */
+.brand.hub-word { margin-left: -4px; }
+@media (max-width: 640px) { .brand.hub-word { margin-left: 0; } }

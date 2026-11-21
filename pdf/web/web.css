@@ -1,0 +1,10 @@
+/* PDF engine loading indicator (web version) */
+.engine { position: fixed; right: 20px; bottom: 20px; z-index: 95; display: flex; align-items: center; gap: 12px; max-width: 380px;
+  background: var(--navy); color: var(--on-navy); padding: 14px 18px; border-left: 3px solid var(--accent);
+  font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; box-shadow: 0 8px 30px rgba(0,0,0,.25); }
+.engine .spinner { width: 18px; height: 18px; border-width: 2px; flex: none; }
+.engine.failed { border-left-color: #e06a50; text-transform: none; letter-spacing: 0; font-family: var(--sans); font-size: 14px; }
+.engine.failed .spinner { display: none; }
+.privacy-note { font-size: 13px; color: var(--muted); margin-top: 18px; max-width: 600px; }
+.privacy-note strong { color: var(--text); font-weight: 500; }
+.foot a { color: inherit; }

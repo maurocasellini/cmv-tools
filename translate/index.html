@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Translator</title>
+<meta name="description" content="Texte und Untertitel übersetzen – offline im Browser, ohne dass etwas an einen Dienst geht.">
+<meta name="theme-color" content="#242b41">
+<script src="shared/theme.js"></script>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="shared/fonts/fonts.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="translate.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="cmv-home" href="https://cmventures.xyz/" title="CM Ventures" aria-label="CM Ventures – Startseite"><img class="cmv-logo on-light" src="shared/brand/cmv-logo.svg" alt="CM Ventures" width="131" height="30"><img class="cmv-logo on-dark" src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="131" height="30"></a>
+  <a class="brand" href="./">
+    <img class="logo-img" src="logo.svg" alt="" width="30" height="30"><span class="logo-word"><b>Trans</b><em>lator</em></span>
+  </a>
+  <span class="local-badge" title="Alle Dateien bleiben auf deinem Gerät. Nichts wird hochgeladen.">Kein Upload</span>
+  <div class="spacer"></div>
+  <a class="all-tools" data-tool-link="hub">Alle Tools</a>
+  <div class="lang-switch" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de">DE</button><button type="button" data-lang="en">EN</button></div>
+</header>
+
+<main>
+  <section id="home" class="view">
+    <div class="hero slim">
+      <div class="eyebrow accent">Übersetzer</div>
+      <h1>Übersetzen, <em>ohne mitzulesen</em>.</h1>
+      <p>Vertrauliche Texte, E-Mails oder Untertitel übersetzen – die Übersetzungs-KI von Mozilla läuft direkt in deinem Browser. Kein Text geht an Google, DeepL oder sonst einen Dienst.</p>
+    </div>
+
+    <div class="langs">
+      <select id="from" aria-label="Ausgangssprache"></select>
+      <button id="swap" type="button" class="swap" title="Sprachen tauschen" aria-label="Sprachen tauschen">⇄</button>
+      <select id="to" aria-label="Zielsprache"></select>
+    </div>
+    <div class="panes">
+      <div class="pane">
+        <textarea id="src" placeholder="Text eingeben oder einfügen …" spellcheck="true"></textarea>
+        <div class="pane-bar">
+          <span id="count" class="muted small" data-no-i18n>0</span>
+          <div class="spacer"></div>
+          <button id="clear" type="button" class="btn small">Leeren</button>
+        </div>
+      </div>
+      <div class="pane out">
+        <div id="dst" class="dst" aria-live="polite" data-no-i18n></div>
+        <div class="pane-bar">
+          <span id="status" class="muted small"></span>
+          <div class="spacer"></div>
+          <button id="copy" type="button" class="btn small">Kopieren</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="files">
+      <div>
+        <div class="label">Datei übersetzen</div>
+        <p class="muted small">Text (.txt) oder Untertitel (.srt, .vtt) – Zeitmarken bleiben erhalten. Passt perfekt zu Voice to Text.</p>
+      </div>
+      <label class="btn">
+        <input id="file" type="file" accept=".txt,.srt,.vtt,.md,text/plain" hidden>
+        Datei wählen
+      </label>
+    </div>
+
+    <ul class="facts">
+      <li>Deutsch, Englisch, Französisch, Italienisch, Spanisch</li>
+      <li>Mozilla Bergamot – die Engine der Firefox-Übersetzung</li>
+      <li>Pro Sprachrichtung einmalig ca. 23 MB, danach offline</li>
+    </ul>
+
+  <div class="how" id="how">
+    <div class="how-head">So funktioniert’s</div>
+    <h2>Warum hier niemand mitliest.</h2>
+    <div class="how-grid">
+      <div class="how-card"><span class="n">01</span><h3>Die Modelle stammen von Mozilla</h3><p>Mozilla – die Organisation hinter dem Firefox-Browser – hat für Firefox eine Übersetzung entwickelt, die ohne Cloud funktioniert. Genau diese Sprachmodelle verwenden wir.</p></div>
+      <div class="how-card"><span class="n">02</span><h3>Übersetzt wird auf deinem Gerät</h3><p>Pro Sprachrichtung (z. B. Deutsch → Englisch) lädt dein Browser einmal ein kleines Modell von ca. 23 MB. Danach übersetzt dein Gerät selbst – auch ohne Internet.</p></div>
+      <div class="how-card"><span class="n">03</span><h3>Kein Dienst sieht deinen Text</h3><p>Bei Google Translate oder DeepL geht jeder Text an deren Server. Hier wird nichts gesendet – die Seite darf technisch gar nicht mit anderen Servern sprechen.</p></div>
+    </div>
+    <p class="how-note">Ehrlich gesagt: Die Modelle sind klein und schnell, aber nicht ganz so gut wie grosse Cloud-Dienste. Für Verträge oder Wichtiges bitte gegenlesen – dafür bleiben vertrauliche Inhalte wirklich vertraulich.</p>
+  </div>
+  </section>
+
+  <section id="about" class="view hidden legal">
+    <a class="back" href="#">← Zurück</a>
+    <h2>Hinweise zum Tool</h2>
+    <p>Der Übersetzer läuft vollständig in deinem Browser. Texte werden nur im Arbeitsspeicher deines Geräts übersetzt und nie an einen Server gesendet – die Seite darf technisch keine Verbindung zu anderen Servern aufbauen (Content Security Policy).</p>
+    <h3>Open Source</h3>
+    <p>Übersetzung: Bergamot Translator (MPL 2.0) mit den Sprachmodellen von Firefox Translations (Mozilla, MPL 2.0). Die Modelle werden von dieser Seite selbst ausgeliefert und beim ersten Gebrauch pro Sprachrichtung geladen. Zwischen zwei Sprachen ohne direktes Modell (z. B. Deutsch → Französisch) wird über Englisch übersetzt.</p>
+    <h3>Qualität</h3>
+    <p>Die Modelle sind klein und schnell, aber nicht so stark wie grosse Cloud-Dienste. Für wichtige Texte bitte gegenlesen.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <span class="foot-id"><a class="foot-brand" href="https://cmventures.xyz/" target="_blank" rel="noopener noreferrer"><img src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="92" height="21"></a><span>Translator</span></span>
+  <nav class="foot-links">
+    <a href="https://cmventures.xyz/data-protection.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+    <a href="https://cmventures.xyz/#impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
+    <a href="#about">Hinweise zum Tool</a>
+    <a href="https://github.com/maurocasellini/cmv-tools/tree/master/translate" target="_blank" rel="noopener noreferrer">Quellcode</a>
+    <a data-tool-link="hub" data-hash="#licenses">Open-Source-Lizenzen</a>
+  </nav>
+</footer>
+
+<script src="i18n-en.js"></script>
+<script src="shared/i18n.js"></script>
+<script src="shared/common.js"></script>
+<script type="module" src="translate.js"></script>
+</body>
+</html>

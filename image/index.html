@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Image Toolkit</title>
+<meta name="description" content="Bilder umwandeln, verkleinern, Metadaten entfernen und freistellen – im Browser, ohne Upload.">
+<meta name="theme-color" content="#242b41">
+<script src="shared/theme.js"></script>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="shared/fonts/fonts.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="image.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="cmv-home" href="https://cmventures.xyz/" title="CM Ventures" aria-label="CM Ventures – Startseite"><img class="cmv-logo on-light" src="shared/brand/cmv-logo.svg" alt="CM Ventures" width="131" height="30"><img class="cmv-logo on-dark" src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="131" height="30"></a>
+  <a class="brand" href="./">
+    <img class="logo-img" src="logo.svg" alt="" width="30" height="30"><span class="logo-word"><b>Image</b> <em>Toolkit</em></span>
+  </a>
+  <span class="local-badge" title="Alle Dateien bleiben auf deinem Gerät. Nichts wird hochgeladen.">Kein Upload</span>
+  <div class="spacer"></div>
+  <a class="all-tools" data-tool-link="hub">Alle Tools</a>
+  <div class="lang-switch" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de">DE</button><button type="button" data-lang="en">EN</button></div>
+</header>
+
+<main>
+  <section id="start" class="view">
+    <div class="hero">
+      <div class="eyebrow accent">Bild-Toolkit</div>
+      <div class="eyebrow">Umwandeln · Verkleinern · Freistellen</div>
+      <h1>Bilder kleiner, sauberer, <em>ohne Spuren</em>.</h1>
+      <p>iPhone-Fotos (HEIC) in JPG umwandeln, Bilder für E-Mail und Web verkleinern, Standort- und Kameradaten entfernen, Gesichter verpixeln oder den Hintergrund freistellen – alles direkt auf deinem Gerät.</p>
+      <div class="hero-actions">
+        <label class="btn primary">
+          <input type="file" accept="image/*,.heic,.heif" multiple hidden data-pick>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.6"/></svg>
+          Bilder wählen
+        </label>
+        <a class="btn" href="#redact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16"/><path d="M6 9h8M6 13h5" /><rect x="13" y="11.5" width="6" height="3" fill="currentColor" stroke="none"/></svg>
+          Screenshot schwärzen
+        </a>
+      </div>
+      <ul class="facts">
+        <li>HEIC, JPG, PNG, WebP, AVIF, GIF</li>
+        <li>Squoosh-Codecs: MozJPEG, WebP, AVIF, OxiPNG</li>
+        <li>Standort &amp; Kameradaten werden immer entfernt</li>
+        <li>Gesichter automatisch verpixeln</li>
+      </ul>
+    </div>
+    <label class="drop" id="drop">
+      <input type="file" accept="image/*,.heic,.heif" multiple hidden data-pick>
+      <strong>Bilder hierher ziehen</strong>
+      <span>oder <u>auswählen</u> – beliebig viele auf einmal</span>
+    </label>
+
+  <div class="how" id="how">
+    <div class="how-head">So funktioniert’s</div>
+    <h2>Bilder bearbeiten, ohne sie herzugeben.</h2>
+    <div class="how-grid">
+      <div class="how-card"><span class="n">01</span><h3>Kleiner speichern</h3><p>Die Bildformate (JPG, WebP, AVIF, PNG) werden mit den Werkzeugen aus Squoosh gespeichert – einem Projekt von Google, das Bilder besonders klein macht, ohne dass man es sieht. iPhone-Fotos (HEIC) liest das Programm libheif.</p></div>
+      <div class="how-card"><span class="n">02</span><h3>Spuren entfernen</h3><p>Fotos enthalten oft versteckte Angaben: wo sie aufgenommen wurden (GPS), mit welchem Handy und wann. Das Tool zeigt dir diese Angaben an und speichert das Bild ohne sie neu. Auf Wunsch macht es auch Gesichter unkenntlich – erkannt von YuNet, einem winzigen Modell aus dem OpenCV-Projekt.</p></div>
+      <div class="how-card"><span class="n">03</span><h3>Hintergrund freistellen</h3><p>Dafür nutzt das Tool ein KI-Modell (IS-Net, bereitgestellt von IMG.LY), das erkennt, was Motiv und was Hintergrund ist. Es wird erst geladen, wenn du die Funktion nutzt (ca. 45 MB), und läuft dann auf deinem Gerät.</p></div>
+    </div>
+    <p class="how-note">Keines deiner Bilder wird hochgeladen – auch nicht für das Freistellen, für das viele Online-Dienste deine Fotos auf ihre Server laden.</p>
+  </div>
+  </section>
+
+  <section id="work" class="view hidden">
+    <div class="work-grid">
+      <div class="work-main">
+        <div class="list-head">
+          <div>
+            <div class="eyebrow accent">Deine Bilder</div>
+            <h2 id="count">1 Bild</h2>
+          </div>
+          <label class="btn">
+            <input type="file" accept="image/*,.heic,.heif" multiple hidden data-pick>
+            + Bilder
+          </label>
+        </div>
+        <div id="list" class="list"></div>
+      </div>
+
+      <aside class="panel">
+        <div class="field"><span>Format</span>
+          <div class="seg" id="format" role="radiogroup">
+            <button type="button" data-v="orig" class="active">Original</button>
+            <button type="button" data-v="jpeg">JPG</button>
+            <button type="button" data-v="webp">WebP</button>
+            <button type="button" data-v="avif">AVIF</button>
+            <button type="button" data-v="png">PNG</button>
+          </div>
+        </div>
+        <label class="field" id="q-field"><span>Qualität <b id="q-out" data-no-i18n>80</b></span>
+          <input id="quality" type="range" min="30" max="95" step="1" value="80">
+        </label>
+        <label class="field"><span>Grösse (längste Seite)</span>
+          <select id="size">
+            <option value="0">Original</option>
+            <option value="3840">3840 px (4K)</option>
+            <option value="2560">2560 px</option>
+            <option value="1920">1920 px (Full HD)</option>
+            <option value="1280">1280 px (E-Mail, Web)</option>
+            <option value="1024">1024 px</option>
+            <option value="640">640 px (klein)</option>
+          </select>
+        </label>
+        <label class="check"><input id="bg" type="checkbox"> <span><b>Hintergrund entfernen</b><br><small class="muted">KI-Freistellung (IS-Net) auf deinem Gerät. Lädt beim ersten Mal ca. 45 MB.</small></span></label>
+        <div class="field" id="bg-field" hidden><span>Neuer Hintergrund</span>
+          <div class="seg" id="bgmode" role="radiogroup">
+            <button type="button" data-v="none" class="active">Transparent</button>
+            <button type="button" data-v="white">Weiss</button>
+            <button type="button" data-v="color">Farbe</button>
+          </div>
+          <input id="bgcolor" type="color" value="#242b41" hidden>
+        </div>
+        <label class="check"><input id="faces" type="checkbox"> <span><b>Gesichter unkenntlich machen</b><br><small class="muted">Erkennt Gesichter automatisch – vor dem Teilen von Fotos mit Kindern oder Passanten. Lädt beim ersten Mal ca. 15 MB.</small></span></label>
+        <div class="field" id="faces-field" hidden><span>Wie?</span>
+          <div class="seg" id="facemode" role="radiogroup">
+            <button type="button" data-v="pixel" class="active">Verpixeln</button>
+            <button type="button" data-v="blur">Weichzeichnen</button>
+            <button type="button" data-v="bar">Abdecken</button>
+          </div>
+          <small class="muted">Bitte das Ergebnis kurz prüfen – sehr kleine oder abgewandte Gesichter können übersehen werden.</small>
+        </div>
+        <p class="note">Metadaten wie GPS-Standort, Kamera und Aufnahmezeit werden beim Speichern immer entfernt.</p>
+        <button id="go" class="btn primary big">Bilder umwandeln</button>
+        <div id="done" class="done hidden">
+          <p id="summary" class="summary"></p>
+          <button id="zip" class="btn big">Alle herunterladen (ZIP)</button>
+          <button id="share" class="btn big hidden">Teilen / Sichern</button>
+        </div>
+        <button id="clear" class="link-btn">Liste leeren</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="redact" class="view hidden">
+    <div class="rd-head">
+      <div>
+        <a class="back" href="#">← Bild-Toolkit</a>
+        <div class="eyebrow accent">Screenshot schwärzen</div>
+        <h2>Namen, Nummern, Adressen – <em>weg, bevor du teilst</em>.</h2>
+        <p class="muted">Screenshot oder Foto laden (auch mit <kbd>⌘V</kbd> / <kbd>Strg+V</kbd> einfügen) und über alles ziehen, was niemand sehen soll. Gespeichert wird ein neues Bild – ohne Metadaten, die Abdeckung lässt sich nicht entfernen.</p>
+      </div>
+    </div>
+    <div id="rd-empty" class="rd-empty">
+      <label class="drop" id="rd-drop">
+        <input id="rd-file" type="file" accept="image/*,.heic,.heif" hidden>
+        <strong>Screenshot hierher ziehen</strong>
+        <span>oder <u>auswählen</u> – oder einfach einfügen</span>
+      </label>
+      <button type="button" id="rd-paste" class="btn hidden">Aus Zwischenablage einfügen</button>
+    </div>
+    <div id="rd-editor" class="rd-editor hidden">
+      <div class="rd-bar">
+        <div class="seg" id="rd-mode" role="radiogroup">
+          <button type="button" data-v="black" class="active">Schwarz</button>
+          <button type="button" data-v="white">Weiss</button>
+          <button type="button" data-v="pixel">Verpixeln</button>
+        </div>
+        <button type="button" id="rd-undo" class="btn small" disabled>↶ Rückgängig</button>
+        <button type="button" id="rd-clear" class="btn small" disabled>Alle entfernen</button>
+        <button type="button" id="rd-new" class="btn small">Anderes Bild</button>
+      </div>
+      <p id="rd-hint" class="rd-hint">Über die Stelle ziehen, die verschwinden soll. Ein Feld antippen und ✕ wählen, um es wieder zu entfernen.</p>
+      <p id="rd-warn" class="rd-warn hidden">Achtung: Verpixelter Text lässt sich manchmal zurückrechnen. Für Namen, Nummern und Passwörter ist Schwarz die sichere Wahl.</p>
+      <div class="rd-stage" id="rd-stage">
+        <canvas id="rd-canvas"></canvas>
+        <svg id="rd-svg" class="rd-svg"></svg>
+      </div>
+      <div class="rd-out">
+        <span id="rd-count" class="muted"></span>
+        <button type="button" id="rd-copy" class="btn">Kopieren</button>
+        <button type="button" id="rd-share" class="btn hidden">Teilen</button>
+        <button type="button" id="rd-dl" class="btn primary">Als PNG speichern</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="view hidden legal">
+    <a class="back" href="#">← Zurück</a>
+    <h2>Hinweise zum Tool</h2>
+    <p>Das Bild-Toolkit läuft vollständig in deinem Browser. Bilder werden nur im Arbeitsspeicher deines Geräts verarbeitet und nie an einen Server gesendet – die Seite darf technisch keine Verbindung zu anderen Servern aufbauen (Content Security Policy).</p>
+    <h3>Open Source</h3>
+    <p>Codecs aus Squoosh (Google, Apache 2.0) über jSquash: MozJPEG, libwebp, libavif, OxiPNG. HEIC: libheif (LGPL). Metadaten lesen: exifr (MIT). Freistellen: IS-Net-Modell von IMG.LY (AGPL), Gesichtserkennung: YuNet aus OpenCV Zoo (MIT), beide ausgeführt mit ONNX Runtime Web (MIT).</p>
+    <h3>Metadaten</h3>
+    <p>Beim Umwandeln wird nur das Bild selbst neu gespeichert. EXIF-, GPS- und andere Metadaten werden dabei nicht übernommen – die Bilder lassen sich bedenkenlos weitergeben.</p>
+  </section>
+</main>
+
+<dialog id="compare" class="compare">
+  <div class="cmp-stage" id="cmp-stage">
+    <img id="cmp-after" alt="">
+    <div class="cmp-before" id="cmp-before-wrap"><img id="cmp-before" alt=""></div>
+    <div class="cmp-line" id="cmp-line"></div>
+  </div>
+  <div class="cmp-bar">
+    <span class="label">Vorher</span>
+    <input id="cmp-range" type="range" min="0" max="100" value="50" aria-label="Vergleich">
+    <span class="label">Nachher</span>
+    <button type="button" id="cmp-close" class="btn">Schliessen</button>
+  </div>
+</dialog>
+
+<dialog id="faced" class="compare faced">
+  <div class="fe-top">
+    <span class="label">Gesichter prüfen</span>
+    <span class="fe-hint">Feld antippen = entfernen. Über ein übersehenes Gesicht ziehen oder darauf tippen = hinzufügen.</span>
+  </div>
+  <div class="fe-stage" id="fe-stage"><div class="fe-wrap" id="fe-wrap"><img id="fe-img" alt="" draggable="false"></div></div>
+  <div class="cmp-bar">
+    <span id="fe-count" class="label"></span>
+    <span class="spacer"></span>
+    <button type="button" id="fe-cancel" class="btn">Abbrechen</button>
+    <button type="button" id="fe-ok" class="btn primary">Übernehmen</button>
+  </div>
+</dialog>
+
+<footer class="foot">
+  <span class="foot-id"><a class="foot-brand" href="https://cmventures.xyz/" target="_blank" rel="noopener noreferrer"><img src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="92" height="21"></a><span>Image Toolkit</span></span>
+  <nav class="foot-links">
+    <a href="https://cmventures.xyz/data-protection.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+    <a href="https://cmventures.xyz/#impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
+    <a href="#about">Hinweise zum Tool</a>
+    <a href="https://github.com/maurocasellini/cmv-tools/tree/master/image" target="_blank" rel="noopener noreferrer">Quellcode</a>
+    <a data-tool-link="hub" data-hash="#licenses">Open-Source-Lizenzen</a>
+  </nav>
+</footer>
+
+<script src="i18n-en.js"></script>
+<script src="shared/i18n.js"></script>
+<script src="shared/common.js"></script>
+<script src="shared/zip.js"></script>
+<script src="vendor/exifr.umd.js" defer></script>
+<script src="image.js" defer></script>
+<script src="redact.js" defer></script>
+</body>
+</html>

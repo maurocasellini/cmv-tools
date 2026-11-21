@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Voice to Text</title>
+  <rect width="64" height="64" rx="14" fill="#242b41"/>
+  <path d="M14 28v8M20 22v20M26 26v12M32 18v28" stroke="#c47d45" stroke-width="3" stroke-linecap="round"/>
+  <path d="M38 24h12M38 32h12M38 40h8" stroke="#f1f1ec" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

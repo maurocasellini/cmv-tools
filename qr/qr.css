@@ -1,0 +1,39 @@
+/* QR Codes */
+.hero.slim { padding-bottom: 20px; }
+.hero.slim h1 { font-size: clamp(32px, 4.4vw, 50px); }
+.qr-grid { display: grid; grid-template-columns: 1fr 380px; gap: 28px; align-items: start; }
+@media (max-width: 900px) { .qr-grid { grid-template-columns: 1fr; } .preview { order: -1; } }
+.editor { display: flex; flex-direction: column; gap: 18px; }
+.types { display: flex; flex-wrap: wrap; border: 1px solid var(--line); }
+.types button { flex: 1 1 auto; border: none; border-radius: 0; padding: 11px 14px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.types button + button { border-left: 1px solid var(--line); }
+.types button.active { background: var(--navy); color: var(--on-navy); }
+:root[data-theme="dark"] .types button.active, :root[data-theme="dark"] .seg button.active { background: var(--accent); color: #fff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .types button.active, :root:not([data-theme="light"]) .seg button.active { background: var(--accent); color: #fff; } }
+.form { display: flex; flex-direction: column; gap: 14px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: end; }
+@media (max-width: 520px) { .two { grid-template-columns: 1fr; } }
+.check.inline { padding-bottom: 10px; }
+textarea { resize: vertical; }
+.design { border: 1px solid var(--line); background: var(--panel); padding: 0 18px; }
+.design[open] { padding-bottom: 18px; }
+.design summary { cursor: pointer; padding: 14px 0; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.design > * + * { margin-top: 14px; }
+input[type=color] { width: 100%; height: 40px; padding: 2px; border: 1px solid var(--line); background: var(--bg); }
+.seg { display: flex; border: 1px solid var(--line); }
+.seg button { flex: 1; border: none; border-radius: 0; padding: 9px 6px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button.active { background: var(--navy); color: var(--on-navy); }
+.logo-row { display: flex; gap: 8px; align-items: center; }
+.btn.small { padding: 8px 12px; font-size: 11px; }
+
+.preview { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 14px; }
+@media (max-width: 900px) { .preview { position: static; } }
+.qr-box { aspect-ratio: 1; border: 1px solid var(--line); display: grid; place-items: center; padding: 18px;
+  background: repeating-conic-gradient(var(--sand) 0% 25%, var(--panel) 0% 50%) 50% / 18px 18px; }
+.qr-box svg { width: 100%; height: 100%; display: block; }
+.qr-box .empty { color: var(--muted); font-size: 14px; text-align: center; }
+.center { text-align: center; margin: 0; }
+.dl { display: flex; gap: 10px; }
+.dl .btn { flex: 1; }
+.note { margin: 0; font-size: 13px; color: var(--muted); border-left: 2px solid var(--accent); padding-left: 10px; }

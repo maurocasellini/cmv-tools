@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Blockchain Demo</title>
+  <rect width="64" height="64" rx="14" fill="#242b41"/>
+  <path d="M22 32h6M36 32h6" stroke="#f1f1ec" stroke-width="2.4" stroke-linecap="round"/>
+  <rect x="10" y="26" width="12" height="12" rx="2.5" fill="none" stroke="#f1f1ec" stroke-width="2.4"/>
+  <rect x="26" y="26" width="12" height="12" rx="2.5" fill="none" stroke="#f1f1ec" stroke-width="2.4"/>
+  <rect x="42" y="26" width="12" height="12" rx="2.5" fill="#c47d45" stroke="#c47d45" stroke-width="2.4"/>
+  <path d="M45 32.2l2.2 2.2 4-4.4" fill="none" stroke="#242b41" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14 19h36" stroke="#c47d45" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 5"/>
+  <path d="M14 45h36" stroke="#c47d45" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 5"/>
+</svg>

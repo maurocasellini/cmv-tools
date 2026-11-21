@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>File Safe</title>
+  <rect width="64" height="64" rx="14" fill="#242b41"/>
+  <path d="M22 29v-6a10 10 0 0 1 20 0v6" fill="none" stroke="#f1f1ec" stroke-width="3"/>
+  <rect x="16" y="29" width="32" height="22" fill="#c47d45"/>
+  <circle cx="32" cy="38.5" r="3.2" fill="#242b41"/><path d="M30.6 40h2.8l1 6h-4.8z" fill="#242b41"/>
+</svg>

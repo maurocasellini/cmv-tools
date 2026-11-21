@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Video Toolkit</title>
+  <rect width="64" height="64" rx="14" fill="#242b41"/>
+  <rect x="13" y="16" width="38" height="26" rx="1.5" fill="none" stroke="#f1f1ec" stroke-width="2.4"/>
+  <path d="M28 23v12l10-6z" fill="#c47d45"/>
+  <path d="M13 49h38" stroke="#f1f1ec" stroke-opacity=".35" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M13 49h16" stroke="#c47d45" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

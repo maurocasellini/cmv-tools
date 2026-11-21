@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Redact screenshot</title>
+  <rect width="64" height="64" rx="14" fill="#242b41"/>
+  <rect x="13" y="15" width="38" height="34" fill="none" stroke="#f1f1ec" stroke-width="2.6"/>
+  <path d="M19 24h20M19 31h8M19 38h22" stroke="#f1f1ec" stroke-width="2.4"/>
+  <rect x="29" y="27.5" width="17" height="7" fill="#c47d45"/>
+</svg>

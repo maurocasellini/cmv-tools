@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Doc Scanner</title>
+<meta name="description" content="Dokumente mit dem Handy scannen – direkt im Browser, ohne Upload.">
+<meta name="theme-color" content="#242b41">
+<script src="shared/theme.js"></script>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="shared/fonts/fonts.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="scan.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="cmv-home" href="https://cmventures.xyz/" title="CM Ventures" aria-label="CM Ventures – Startseite"><img class="cmv-logo on-light" src="shared/brand/cmv-logo.svg" alt="CM Ventures" width="131" height="30"><img class="cmv-logo on-dark" src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="131" height="30"></a>
+  <a class="brand" href="./">
+    <img class="logo-img" src="logo.svg" alt="" width="30" height="30"><span class="logo-word"><b>Doc</b> <em>Scanner</em></span>
+  </a>
+  <span class="local-badge" title="Alle Dateien bleiben auf deinem Gerät. Nichts wird hochgeladen.">Kein Upload</span>
+  <div class="spacer"></div>
+  <a class="all-tools" data-tool-link="hub">Alle Tools</a>
+  <div class="lang-switch" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de">DE</button><button type="button" data-lang="en">EN</button></div>
+</header>
+
+<main>
+  <!-- Start -->
+  <section id="start" class="view">
+    <div class="hero">
+      <div class="eyebrow accent">Dokument-Scanner</div>
+      <div class="eyebrow">Fotografieren · Geraderichten · PDF</div>
+      <h1>Papier rein, <em>sauberes PDF</em> raus.</h1>
+      <p>Blatt fotografieren – die Kanten werden automatisch erkannt, das Bild entzerrt und wie ein Scan aufbereitet. Auf Wunsch mit Texterkennung, damit das PDF durchsuchbar ist.</p>
+      <div class="hero-actions">
+        <button type="button" class="btn primary cam-open hidden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 8V4h4M17 4h4v4M21 16v4h-4M7 20H3v-4"/><path d="M8 8h8v8H8z"/></svg>
+          Live-Scan
+        </button>
+        <label class="btn primary pick photo-pick">
+          <input type="file" accept="image/*" capture="environment" hidden data-pick>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.6"/></svg>
+          Foto aufnehmen
+        </label>
+        <label class="btn pick">
+          <input type="file" accept="image/*" multiple hidden data-pick>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.6"/></svg>
+          Bilder wählen
+        </label>
+      </div>
+      <ul class="facts">
+        <li>Live-Scan: Auslöser erkennt das Blatt selbst</li>
+        <li>Kanten­erkennung &amp; Entzerrung mit OpenCV</li>
+        <li>Texterkennung (OCR) Deutsch &amp; Englisch</li>
+        <li>Fotos verlassen nie dein Gerät</li>
+      </ul>
+    </div>
+    <label class="drop" id="drop">
+      <input type="file" accept="image/*" multiple hidden data-pick>
+      <strong>Fotos hierher ziehen</strong>
+      <span>oder <u>auswählen</u> – JPG, PNG, HEIC (vom iPhone)</span>
+    </label>
+
+  <div class="how" id="how">
+    <div class="how-head">So funktioniert’s</div>
+    <h2>Scannen, ohne dass das Foto dein Handy verlässt.</h2>
+    <div class="how-grid">
+      <div class="how-card"><span class="n">01</span><h3>Blattkanten finden</h3><p>Dafür nutzt der Scanner OpenCV – eine Bild-Software, die auch in Robotern, Autos und Industrie-Kameras steckt. Sie erkennt die vier Ecken des Blatts und zieht das Bild gerade.</p></div>
+      <div class="how-card"><span class="n">02</span><h3>Text erkennen</h3><p>Die Texterkennung heisst Tesseract. Sie wurde ursprünglich von HP entwickelt und später von Google weitergeführt. Sie liest die Buchstaben im Bild und legt sie unsichtbar ins PDF – so kannst du darin suchen und kopieren.</p></div>
+      <div class="how-card"><span class="n">03</span><h3>Was geladen wird</h3><p>Beim ersten Foto lädt der Browser die Bild-Software (ca. 13 MB), für die Texterkennung zusätzlich ca. 8 MB. Danach ist alles gespeichert und funktioniert sogar ohne Internet.</p></div>
+    </div>
+    <p class="how-note">Deine Fotos werden nicht hochgeladen und nirgends gespeichert. Schliesst du die Seite, sind sie weg – das fertige PDF hast nur du.</p>
+  </div>
+  </section>
+
+  <!-- Pages -->
+  <section id="pages" class="view hidden">
+    <div class="pages-head">
+      <div>
+        <div class="eyebrow accent">Dein Dokument</div>
+        <h2 id="pages-title">1 Seite</h2>
+      </div>
+      <div class="add-row">
+        <button type="button" class="btn primary cam-open hidden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 8V4h4M17 4h4v4M21 16v4h-4M7 20H3v-4"/><path d="M8 8h8v8H8z"/></svg>
+          Live-Scan
+        </button>
+        <label class="btn primary pick photo-pick">
+          <input type="file" accept="image/*" capture="environment" hidden data-pick>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.6"/></svg>
+          Seite fotografieren
+        </label>
+        <label class="btn pick">
+          <input type="file" accept="image/*" multiple hidden data-pick>
+          + Bilder
+        </label>
+      </div>
+    </div>
+
+    <div class="filters" role="radiogroup" aria-label="Look">
+      <span class="label">Look</span>
+      <button type="button" data-filter="color" class="active">Farbe</button>
+      <button type="button" data-filter="gray">Graustufen</button>
+      <button type="button" data-filter="bw">Schwarz-weiss</button>
+      <button type="button" data-filter="none">Original</button>
+    </div>
+
+    <div id="grid" class="grid"></div>
+
+    <div class="export">
+      <div class="export-fields">
+        <label class="field"><span>Dateiname</span><input id="name" type="text" autocomplete="off" data-no-i18n></label>
+        <label class="field"><span>Seitenformat</span>
+          <select id="size">
+            <option value="a4">A4</option>
+            <option value="letter">US Letter</option>
+            <option value="fit">Wie das Foto</option>
+          </select>
+        </label>
+        <label class="field"><span>Qualität</span>
+          <select id="quality">
+            <option value="small">Klein (E-Mail)</option>
+            <option value="normal" selected>Normal</option>
+            <option value="high">Hoch</option>
+          </select>
+        </label>
+      </div>
+      <label class="check"><input id="ocr" type="checkbox" checked>
+        <span><b>Text erkennen (OCR)</b><br><small class="muted">Macht das PDF durchsuchbar und Text kopierbar. Lädt beim ersten Mal ca. 8 MB.</small></span>
+      </label>
+      <label class="field ocr-lang"><span>Sprache des Dokuments</span>
+        <select id="ocr-lang">
+          <option value="deu+eng">Deutsch + Englisch</option>
+          <option value="deu">Deutsch</option>
+          <option value="eng">Englisch</option>
+        </select>
+      </label>
+      <button id="make" class="btn primary big">PDF erstellen</button>
+    </div>
+
+    <div id="result" class="result hidden">
+      <div class="eyebrow accent">Fertig</div>
+      <h3 id="res-name" data-no-i18n></h3>
+      <p id="res-meta" class="muted"></p>
+      <div class="hero-actions">
+        <button id="res-share" class="btn primary">Teilen / Sichern</button>
+        <button id="res-dl" class="btn">Herunterladen</button>
+        <button id="res-text" class="btn hidden">Text kopieren</button>
+      </div>
+      <details id="res-text-box" class="hidden"><summary>Erkannter Text</summary><pre id="res-text-pre" data-no-i18n></pre></details>
+    </div>
+
+    <p class="restart"><button id="restart" class="link-btn">Neues Dokument beginnen</button></p>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="view hidden legal">
+    <a class="back" href="#">← Zurück</a>
+    <h2>Hinweise zum Tool</h2>
+    <p>Der Scanner läuft vollständig in deinem Browser. Fotos werden nur im Arbeitsspeicher deines Geräts verarbeitet und nie an einen Server gesendet – die Seite darf technisch keine Verbindung zu anderen Servern aufbauen (Content Security Policy).</p>
+    <h3>Open Source</h3>
+    <p>Kantenerkennung und Bildverarbeitung: OpenCV (Apache 2.0). Texterkennung: Tesseract / Tesseract.js (Apache 2.0). PDF-Erstellung: pdf-lib (MIT). Alle Bibliotheken werden von dieser Seite selbst ausgeliefert.</p>
+    <h3>Speicher</h3>
+    <p>Nach dem ersten Besuch werden die Programmdateien im Browser zwischengespeichert, damit der Scanner auch offline funktioniert. Deine Dokumente werden nicht gespeichert.</p>
+  </section>
+</main>
+
+<!-- Live camera: detects the page continuously and captures when it is held still -->
+<div id="cam" class="cam hidden" role="dialog" aria-label="Live-Scan">
+  <div id="cam-stage" class="cam-stage">
+    <video id="cam-video" playsinline muted autoplay></video>
+    <svg id="cam-svg" class="cam-svg"></svg>
+    <div id="cam-flash" class="cam-flash"></div>
+    <div id="cam-hint" class="cam-hint">Kamera wird gestartet …</div>
+    <button type="button" id="cam-torch" class="cam-torch hidden" title="Licht" aria-label="Licht">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>
+    </button>
+  </div>
+  <div class="cam-bar">
+    <label class="cam-auto"><input id="cam-auto" type="checkbox" checked> <span>Auto</span></label>
+    <button type="button" id="cam-shot" class="cam-shot" title="Jetzt aufnehmen" aria-label="Jetzt aufnehmen"></button>
+    <button type="button" id="cam-done" class="cam-done"><span id="cam-thumb" class="cam-thumb"></span><span>Fertig</span></button>
+  </div>
+</div>
+
+<!-- Crop editor -->
+<div id="crop" class="crop hidden" role="dialog" aria-label="Ecken anpassen">
+  <div class="crop-top">
+    <span class="label">Ecken anpassen</span>
+    <span id="crop-hint" class="crop-hint">Ziehe die Punkte auf die Ecken des Blatts.</span>
+  </div>
+  <div id="stage" class="stage">
+    <canvas id="crop-canvas"></canvas>
+    <svg id="crop-svg" class="crop-svg"></svg>
+    <canvas id="loupe" class="loupe hidden" width="120" height="120"></canvas>
+    <div id="crop-busy" class="crop-busy hidden"><div class="spinner"></div><span>Kanten werden erkannt …</span></div>
+  </div>
+  <div class="crop-bar">
+    <button type="button" id="crop-cancel" class="btn">Abbrechen</button>
+    <button type="button" id="crop-auto" class="btn" title="Kanten automatisch erkennen">Automatisch</button>
+    <button type="button" id="crop-full" class="btn" title="Ganzes Bild verwenden">Ganzes Bild</button>
+    <button type="button" id="crop-ok" class="btn primary">Übernehmen</button>
+  </div>
+</div>
+
+<footer class="foot">
+  <span class="foot-id"><a class="foot-brand" href="https://cmventures.xyz/" target="_blank" rel="noopener noreferrer"><img src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="92" height="21"></a><span>Doc Scanner</span></span>
+  <nav class="foot-links">
+    <a href="https://cmventures.xyz/data-protection.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+    <a href="https://cmventures.xyz/#impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
+    <a href="#about">Hinweise zum Tool</a>
+    <a href="https://github.com/maurocasellini/cmv-tools/tree/master/scan" target="_blank" rel="noopener noreferrer">Quellcode</a>
+    <a data-tool-link="hub" data-hash="#licenses">Open-Source-Lizenzen</a>
+  </nav>
+</footer>
+
+<script src="i18n-en.js"></script>
+<script src="shared/i18n.js"></script>
+<script src="shared/common.js"></script>
+<script src="vendor/pdf-lib.min.js" defer></script>
+<script src="scan.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Video Toolkit</title>
+<meta name="description" content="Videos kürzen, verkleinern, schneller oder langsamer machen, in GIF umwandeln und Ton extrahieren – im Browser, ohne Upload.">
+<meta name="theme-color" content="#242b41">
+<script src="shared/theme.js"></script>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="shared/fonts/fonts.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="video.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="cmv-home" href="https://cmventures.xyz/" title="CM Ventures" aria-label="CM Ventures – Startseite"><img class="cmv-logo on-light" src="shared/brand/cmv-logo.svg" alt="CM Ventures" width="131" height="30"><img class="cmv-logo on-dark" src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="131" height="30"></a>
+  <a class="brand" href="./">
+    <img class="logo-img" src="logo.svg" alt="" width="30" height="30"><span class="logo-word"><b>Video</b> <em>Toolkit</em></span>
+  </a>
+  <span class="local-badge" title="Alle Dateien bleiben auf deinem Gerät. Nichts wird hochgeladen.">Kein Upload</span>
+  <div class="spacer"></div>
+  <a class="all-tools" data-tool-link="hub">Alle Tools</a>
+  <div class="lang-switch" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de">DE</button><button type="button" data-lang="en">EN</button></div>
+</header>
+
+<main>
+  <section id="start" class="view">
+    <div class="hero">
+      <div class="eyebrow accent">Video-Toolkit</div>
+      <div class="eyebrow">Kürzen · Verkleinern · Tempo · Untertitel · GIF · Ton</div>
+      <h1>Videos teilen, <em>ohne sie hochzuladen</em>.</h1>
+      <p>Clip kürzen, für WhatsApp oder E-Mail verkleinern, schneller oder langsamer machen (0,25× bis 10×), Untertitel einbrennen, in ein GIF verwandeln oder nur den Ton als MP3 speichern. FFmpeg läuft dafür direkt in deinem Browser.</p>
+      <div class="hero-actions">
+        <label class="btn primary">
+          <input type="file" accept="video/*,.mov,.mkv,.avi,.webm" hidden data-pick>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="13"/><path d="m10 9 5 2.5-5 2.5z"/></svg>
+          Video wählen
+        </label>
+      </div>
+      <ul class="facts">
+        <li>MP4, MOV (iPhone), WebM, MKV, AVI</li>
+        <li>Zielgrösse für WhatsApp &amp; E-Mail</li>
+        <li>Zeitlupe &amp; Zeitraffer: 0,25× bis 10×</li>
+        <li>Untertitel (.srt) fest ins Bild einbrennen</li>
+        <li>FFmpeg als WebAssembly – nichts verlässt dein Gerät</li>
+      </ul>
+    </div>
+    <label class="drop" id="drop">
+      <input type="file" accept="video/*,.mov,.mkv,.avi,.webm" hidden data-pick>
+      <strong>Video hierher ziehen</strong>
+      <span>oder <u>auswählen</u></span>
+    </label>
+
+  <div class="how" id="how">
+    <div class="how-head">So funktioniert’s</div>
+    <h2>Videos bearbeiten, ohne Upload-Wartezeit.</h2>
+    <div class="how-grid">
+      <div class="how-card"><span class="n">01</span><h3>Die Technik: FFmpeg</h3><p>FFmpeg ist das Programm, das im Hintergrund von VLC, YouTube und unzähligen Video-Apps arbeitet. Hier läuft es direkt in deinem Browser.</p></div>
+      <div class="how-card"><span class="n">02</span><h3>Dein Video bleibt bei dir</h3><p>Das Video wird nicht kopiert und nicht hochgeladen. FFmpeg liest es direkt von deinem Gerät und schreibt das Ergebnis wieder dorthin.</p></div>
+      <div class="how-card"><span class="n">03</span><h3>Was geladen wird</h3><p>Einmalig ca. 32 MB für FFmpeg. Weil dein Gerät rechnet, dauern lange Videos etwas – dafür musst du nichts hochladen und nichts herunterladen.</p></div>
+    </div>
+    <p class="how-note">Praktisch für private Familienvideos oder vertrauliche Aufnahmen, die nicht auf fremden Servern landen sollen.</p>
+  </div>
+  </section>
+
+  <section id="work" class="view hidden">
+    <div class="work-grid">
+      <div class="work-main">
+        <div class="eyebrow accent">Video</div>
+        <h2 id="v-name" data-no-i18n></h2>
+        <p id="v-meta" class="muted"></p>
+        <video id="player" controls playsinline preload="metadata"></video>
+        <div class="trim">
+          <div class="label">Ausschnitt <b id="trim-out" data-no-i18n></b></div>
+          <div class="trim-row">
+            <label class="field"><span>Start</span><input id="t-start" type="range" min="0" step="0.1" value="0"></label>
+            <button type="button" class="btn small" data-set="start" title="Aktuelle Position als Start">⇤ Hier</button>
+          </div>
+          <div class="trim-row">
+            <label class="field"><span>Ende</span><input id="t-end" type="range" min="0" step="0.1" value="0"></label>
+            <button type="button" class="btn small" data-set="end" title="Aktuelle Position als Ende">Hier ⇥</button>
+          </div>
+          <div class="speed-row">
+            <div class="label">Tempo <b id="speed-out" data-no-i18n>1×</b></div>
+            <input id="speed" type="range" min="0" max="12" step="1" value="4" aria-label="Tempo">
+            <div class="speed-marks" aria-hidden="true"><span>0.25×</span><span>1×</span><span>2×</span><span>10×</span></div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="panel">
+        <div class="field"><span>Was möchtest du?</span>
+          <div class="seg col" id="action" role="radiogroup">
+            <button type="button" data-v="shrink" class="active">Verkleinern / kürzen (MP4)</button>
+            <button type="button" data-v="speed">Geschwindigkeit ändern</button>
+            <button type="button" data-v="subs">Untertitel einbrennen</button>
+            <button type="button" data-v="gif">GIF erstellen</button>
+            <button type="button" data-v="mp3">Nur Ton (MP3)</button>
+            <button type="button" data-v="mute">Ton entfernen</button>
+          </div>
+        </div>
+        <div id="opt-shrink" class="opts">
+          <label class="field"><span>Ziel</span>
+            <select id="target">
+              <option value="balanced">Ausgewogen (gute Qualität)</option>
+              <option value="whatsapp">WhatsApp (max. 16 MB)</option>
+              <option value="email">E-Mail (max. 20 MB)</option>
+              <option value="small">Möglichst klein</option>
+            </select>
+          </label>
+          <label class="field"><span>Auflösung</span>
+            <select id="res">
+              <option value="0">Wie Original</option>
+              <option value="1080">1080p</option>
+              <option value="720" selected>720p</option>
+              <option value="480">480p</option>
+            </select>
+          </label>
+        </div>
+        <div id="opt-speed" class="opts" hidden>
+          <div class="field"><span>Tempo</span>
+            <div class="speed-pick" id="speed-pick">
+              <button type="button" data-i="0">0,25×</button><button type="button" data-i="1">0,5×</button><button type="button" data-i="2">0,75×</button>
+              <button type="button" data-i="6">1,5×</button><button type="button" data-i="7">2×</button><button type="button" data-i="9">4×</button>
+              <button type="button" data-i="11">8×</button><button type="button" data-i="12">10×</button>
+            </div>
+          </div>
+          <label class="check"><input id="speed-audio" type="checkbox" checked> <span>Ton behalten (Tonhöhe bleibt gleich)</span></label>
+          <p class="note">Zwischenstufen über den Tempo-Regler unter dem Video. Ab 4× ist der Ton kaum noch verständlich – dann besser ohne Ton.</p>
+        </div>
+        <div id="opt-subs" class="opts" hidden>
+          <div class="field"><span>Untertitel-Datei</span>
+            <label class="btn sub-pick"><input id="sub-file" type="file" accept=".srt,.vtt,text/vtt,application/x-subrip" hidden><span id="sub-name">.srt oder .vtt wählen</span></label>
+          </div>
+          <p class="note">Noch keine Untertitel? <a data-tool-link="voice">Voice to Text</a> erstellt sie aus der Tonspur – als .srt speichern und hier wählen.</p>
+          <label class="field"><span>Schriftgrösse</span>
+            <select id="sub-size"><option value="16">Klein</option><option value="20" selected>Mittel</option><option value="26">Gross</option></select>
+          </label>
+          <label class="field"><span>Stil</span>
+            <select id="sub-style"><option value="outline">Weiss mit schwarzem Rand</option><option value="box">Weiss auf dunklem Balken</option><option value="yellow">Gelb mit schwarzem Rand</option></select>
+          </label>
+          <label class="field"><span>Auflösung</span>
+            <select id="sub-res"><option value="0">Wie Original</option><option value="1080" selected>1080p</option><option value="720">720p</option></select>
+          </label>
+        </div>
+        <div id="opt-gif" class="opts" hidden>
+          <label class="field"><span>Breite</span>
+            <select id="gif-w"><option value="320">320 px</option><option value="480" selected>480 px</option><option value="640">640 px</option></select>
+          </label>
+          <label class="field"><span>Bilder pro Sekunde</span>
+            <select id="gif-fps"><option value="8">8</option><option value="12" selected>12</option><option value="15">15</option></select>
+          </label>
+          <p class="note">Tipp: GIFs werden schnell gross – am besten nur wenige Sekunden auswählen.</p>
+        </div>
+        <button id="go" class="btn primary big">Los</button>
+        <p class="note">Läuft auf deinem Gerät. Längere Videos brauchen etwas Geduld – der Tab muss dabei offen bleiben.</p>
+
+        <div id="result" class="result hidden">
+          <div class="eyebrow accent">Fertig</div>
+          <p id="r-meta" class="summary"></p>
+          <video id="r-video" controls playsinline hidden></video>
+          <img id="r-img" alt="" hidden>
+          <audio id="r-audio" controls hidden></audio>
+          <button id="r-share" class="btn primary big hidden">Teilen / Sichern</button>
+          <button id="r-dl" class="btn big">Herunterladen</button>
+        </div>
+        <button id="other" class="link-btn">Anderes Video</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="about" class="view hidden legal">
+    <a class="back" href="#">← Zurück</a>
+    <h2>Hinweise zum Tool</h2>
+    <p>Das Video-Toolkit läuft vollständig in deinem Browser. Videos werden nur im Arbeitsspeicher deines Geräts verarbeitet und nie an einen Server gesendet – die Seite darf technisch keine Verbindung zu anderen Servern aufbauen (Content Security Policy).</p>
+    <h3>Open Source</h3>
+    <p>FFmpeg (LGPL/GPL) als WebAssembly über ffmpeg.wasm (MIT), mit x264, LAME, libass und weiteren Codecs. Schrift für Untertitel: Liberation Sans (SIL OFL). Die Engine (ca. 32 MB) wird beim ersten Mal geladen und danach im Browser gespeichert.</p>
+    <h3>Grenzen</h3>
+    <p>Die Umwandlung läuft auf dem Prozessor deines Geräts und ist langsamer als spezialisierte Apps. Sehr grosse Videos (über ca. 1 GB) können den Speicher des Browsers übersteigen.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <span class="foot-id"><a class="foot-brand" href="https://cmventures.xyz/" target="_blank" rel="noopener noreferrer"><img src="shared/brand/cmv-logo-light.svg" alt="CM Ventures" width="92" height="21"></a><span>Video Toolkit</span></span>
+  <nav class="foot-links">
+    <a href="https://cmventures.xyz/data-protection.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+    <a href="https://cmventures.xyz/#impressum" target="_blank" rel="noopener noreferrer">Impressum</a>
+    <a href="#about">Hinweise zum Tool</a>
+    <a href="https://github.com/maurocasellini/cmv-tools/tree/master/video" target="_blank" rel="noopener noreferrer">Quellcode</a>
+    <a data-tool-link="hub" data-hash="#licenses">Open-Source-Lizenzen</a>
+  </nav>
+</footer>
+
+<script src="i18n-en.js"></script>
+<script src="shared/i18n.js"></script>
+<script src="shared/common.js"></script>
+<script type="module" src="video.js"></script>
+</body>
+</html>

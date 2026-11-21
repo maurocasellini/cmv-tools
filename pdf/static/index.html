@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF Toolkit</title>
+<script src="static/theme.js"></script>
+<link rel="icon" href="static/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="static/fonts/fonts.css">
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="cmv-home" href="https://cmventures.xyz/" title="CM Ventures" aria-label="CM Ventures – Startseite"><img class="cmv-logo on-light" src="static/brand/cmv-logo.svg" alt="CM Ventures" width="131" height="30"><img class="cmv-logo on-dark" src="static/brand/cmv-logo-light.svg" alt="CM Ventures" width="131" height="30"></a>
+  <a class="brand" href="#" data-home>
+    <img class="logo-img" src="static/logo.svg" alt="" width="30" height="30"><span class="logo-word"><b>PDF</b> <em>Toolkit</em></span>
+  </a>
+  <span class="local-badge" title="Alle Dateien bleiben auf diesem Mac. Nichts wird hochgeladen.">100 % lokal</span>
+  <div class="spacer"></div>
+  <a class="all-tools" href="https://tools.cmventures.xyz/">Alle Tools</a>
+  <div class="lang-switch" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de">DE</button><button type="button" data-lang="en">EN</button></div>
+  <input id="search" type="search" placeholder="Werkzeug suchen …" autocomplete="off">
+  <button id="quit" class="quit hidden" title="App beenden">Beenden</button>
+</header>
+<div id="offline" class="offline hidden">PDF Toolkit läuft nicht mehr – bitte die App neu öffnen und diese Seite neu laden.</div>
+
+<main>
+  <!-- Home -->
+  <section id="home" class="view">
+    <div class="hero">
+      <div class="eyebrow accent">Lokaler PDF-Werkzeugkasten</div>
+      <div class="eyebrow">Bearbeiten · Unterschreiben · Umwandeln</div>
+      <h1>Alles, was du mit PDFs machen musst, <em>offline</em>.</h1>
+      <p>Zusammenfügen, verkleinern, Seiten entfernen, unterschreiben, „wie gescannt“ ausgeben und vieles mehr – direkt auf deinem Mac, ohne Upload.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#/tool/sign">PDF unterschreiben</a>
+        <a class="btn" href="#/tool/compress">PDF komprimieren</a>
+        <a class="btn" href="#/tool/merge">PDF zusammenfügen</a>
+      </div>
+      <ul class="facts">
+        <li>Dateien verlassen nie diesen Rechner</li>
+        <li>29 Werkzeuge in einer Oberfläche</li>
+        <li>Unterschreiben &amp; „wie gescannt“ in einem Schritt</li>
+      </ul>
+    </div>
+    <div id="tool-grid"></div>
+
+  <div class="how" id="how">
+    <div class="how-head">So funktioniert’s</div>
+    <h2>PDFs bearbeiten, ohne sie aus der Hand zu geben.</h2>
+    <div class="how-grid">
+      <div class="how-card"><span class="n">01</span><h3>Die PDF-Engine: MuPDF</h3><p>Herzstück ist MuPDF – eine bewährte PDF-Software, die auch in vielen PDF-Readern und E-Book-Apps steckt. Sie läuft hier direkt in deinem Browser.</p></div>
+      <div class="how-card"><span class="n">02</span><h3>Deine Datei bleibt bei dir</h3><p>Verträge, Ausweise, Rechnungen: Die Datei wird nur im Arbeitsspeicher deines Geräts geöffnet, bearbeitet und wieder gespeichert. Es gibt keinen Server, der sie zu sehen bekommt.</p></div>
+      <div class="how-card"><span class="n">03</span><h3>Was geladen wird</h3><p>Beim ersten Besuch ca. 38 MB für die PDF-Engine, danach ist sie gespeichert und funktioniert sogar offline – zum Beispiel im Flugzeug.</p></div>
+    </div>
+    <p class="how-note">Viele bekannte PDF-Webseiten laden deine Dateien auf ihre Server. Hier ist das technisch ausgeschlossen: Die Seite darf mit keinem anderen Server sprechen.</p>
+  </div>
+  </section>
+
+  <!-- Generic tool view -->
+  <section id="tool" class="view hidden">
+    <div class="tool-head">
+      <button class="back" data-home>← Alle Werkzeuge</button>
+      <div class="tool-title-row"><span id="tool-icon" class="ico big-ico"></span><h2 id="tool-title"></h2></div>
+      <p id="tool-desc"></p>
+      <div id="tool-warning" class="warning hidden"></div>
+    </div>
+    <div class="tool-body">
+      <div class="tool-main">
+        <label id="dropzone" class="dropzone">
+          <input id="file-input" type="file" hidden>
+          <strong>Dateien hierher ziehen</strong>
+          <span>oder <u>auswählen</u></span>
+          <small id="accept-hint"></small>
+        </label>
+        <div id="file-list" class="file-list"></div>
+        <div id="picker" class="picker hidden">
+          <div class="picker-head">
+            <span>Seiten anklicken zum Auswählen</span>
+            <span><button type="button" class="link" data-pick="all">alle</button> · <button type="button" class="link" data-pick="none">keine</button> · <button type="button" class="link" data-pick="invert">umkehren</button></span>
+          </div>
+          <div class="picker-grid"></div>
+        </div>
+        <div id="organizer" class="organizer hidden">
+          <div class="org-bar">
+            <button type="button" data-org="blank">+ Leere Seite</button>
+            <button type="button" data-org="rotall">⟳ Alle drehen</button>
+            <button type="button" data-org="reverse">⇅ Reihenfolge umkehren</button>
+            <button type="button" data-org="reset">Zurücksetzen</button>
+            <span class="muted" id="org-count"></span>
+          </div>
+          <div class="org-grid"></div>
+        </div>
+        <div id="former" class="former hidden"></div>
+        <div id="compare-out" class="compare-out hidden"></div>
+      </div>
+      <aside class="tool-side">
+        <form id="options" class="options" autocomplete="off"></form>
+        <button id="run" class="primary big">Ausführen</button>
+        <div id="result" class="result hidden"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Privacy -->
+  <section id="privacy" class="view hidden legal">
+    <button class="back" data-home>← Alle Werkzeuge</button>
+    <h2>Hinweise zum Tool</h2>
+    <p>PDF Toolkit verarbeitet deine Dateien ausschliesslich in deinem Browser. Dateien, Inhalte und Eingaben werden nicht an einen Server übertragen – die Seite darf technisch keine Verbindungen zu fremden Servern aufbauen.</p>
+    <h3>Hosting</h3>
+    <p>Die Website wird über Vercel Inc. (USA) ausgeliefert. Beim Aufruf verarbeitet Vercel technisch notwendige Verbindungsdaten (z. B. IP-Adresse, Zeitpunkt, Browsertyp), um die Seite auszuliefern und vor Missbrauch zu schützen.</p>
+    <h3>Speicherung auf deinem Gerät</h3>
+    <p>Damit die App schnell startet und offline funktioniert, speichert dein Browser ihre Programmdateien. Zusätzlich werden nur deine Sprachwahl und – falls du das möchtest – gespeicherte Unterschriften lokal abgelegt. Diese Daten bleiben auf deinem Gerät und lassen sich jederzeit über die Browser-Einstellungen löschen.</p>
+    <p>Es gibt keine Cookies, kein Tracking und keine Analyse-Werkzeuge.</p>
+    <h3>Verantwortlich</h3>
+    <p>Verantwortlich ist der Betreiber gemäss Impressum auf cmventures.xyz. Es gilt die allgemeine Datenschutzerklärung von cmventures.xyz; bei Fragen wende dich an die dort genannte Kontaktadresse.</p>
+    <p class="legal-links"><a class="btn" href="https://cmventures.xyz/data-protection.html" target="_blank" rel="noopener noreferrer">Datenschutzerklärung</a> <a class="btn" href="https://cmventures.xyz/#impressum" target="_blank" rel="noopener noreferrer">Impressum</a></p>
+  </section>
+
+  <!-- Editor -->
+  <section id="editor" class="view hidden">
+    <div class="ed-toolbar">
+      <button class="back" data-home>←</button>
+      <div class="ed-tools">
+        <button data-tool="select" class="active" title="Auswählen & verschieben (V)">Auswählen</button>
+        <button data-tool="signature" title="Unterschrift hinzufügen">Unterschrift</button>
+        <button data-tool="text" title="Text (T)">Text</button>
+        <button data-tool="date" title="Heutiges Datum">Datum</button>
+        <button data-tool="image" title="Bild einfügen">Bild</button>
+        <button data-tool="check" title="Häkchen">✓</button>
+        <button data-tool="cross" title="Kreuz">✕</button>
+        <button data-tool="whiteout" title="Weiss abdecken (Text überdecken)">Abdecken</button>
+        <button data-tool="highlight" title="Markieren">Markieren</button>
+        <button data-tool="rect" title="Rechteck">□</button>
+        <button data-tool="ellipse" title="Ellipse">○</button>
+        <button data-tool="line" title="Linie">─</button>
+        <button data-tool="redact" title="Bereich dauerhaft schwärzen">Schwärzen</button>
+      </div>
+      <div class="spacer"></div>
+      <button id="ed-undo" title="Rückgängig (⌘Z)">↶</button>
+      <button id="ed-zoom-out" title="Verkleinern">−</button>
+      <span id="ed-zoom-label">100 %</span>
+      <button id="ed-zoom-in" title="Vergrössern">+</button>
+    </div>
+    <div class="ed-body">
+      <div id="ed-pages" class="ed-pages">
+        <label id="ed-drop" class="dropzone ed-drop">
+          <input id="ed-file" type="file" accept=".pdf,application/pdf" hidden>
+          <strong>PDF hierher ziehen</strong><span>oder <u>auswählen</u></span>
+        </label>
+      </div>
+      <aside class="ed-side">
+        <div id="ed-hint" class="ed-hint">Wähle oben ein Werkzeug und klicke auf die Seite.</div>
+        <div id="ed-props" class="ed-props"></div>
+        <div class="ed-finish">
+          <h3>Fertigstellen</h3>
+          <label class="check"><input type="checkbox" id="ed-scan"> <span>Als Scan ausgeben<br><small>Sieht aus wie ausgedruckt, unterschrieben &amp; eingescannt</small></span></label>
+          <div id="ed-scan-opts" class="hidden">
+            <label>Stärke <select id="ed-scan-int"><option value="leicht">Leicht</option><option value="mittel" selected>Mittel</option><option value="stark">Stark</option></select></label>
+            <label>Farbe <select id="ed-scan-color"><option value="gray">Graustufen</option><option value="color">Farbe</option><option value="bw">Schwarz-Weiss</option></select></label>
+          </div>
+          <button id="ed-save" class="primary big">PDF speichern</button>
+          <div id="ed-result" class="result hidden"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+<footer class="foot">
+  <span class="foot-id"><a class="foot-brand" href="https://cmventures.xyz/" target="_blank" rel="noopener noreferrer"><img src="static/brand/cmv-logo-light.svg" alt="CM Ventures" width="92" height="21"></a><span>PDF Toolkit</span></span>
+  <nav class="foot-links"><a href="https://cmventures.xyz/data-protection.html" target="_blank" rel="noopener noreferrer">Datenschutz</a><a href="https://cmventures.xyz/#impressum" target="_blank" rel="noopener noreferrer">Impressum</a><a href="#/datenschutz">Hinweise zum Tool</a><a href="https://github.com/maurocasellini/cmv-tools/tree/master/pdf" target="_blank" rel="noopener noreferrer">Quellcode</a><a href="https://tools.cmventures.xyz/#licenses" target="_blank" rel="noopener noreferrer">Open-Source-Lizenzen</a></nav>
+  <span>Läuft lokal auf 127.0.0.1 · keine Daten verlassen diesen Mac</span>
+</footer>
+
+<!-- Signature dialog -->
+<dialog id="sig-dialog">
+  <form method="dialog" class="sig-form">
+    <h3>Unterschrift</h3>
+    <div id="sig-saved" class="sig-saved"></div>
+    <div class="tabs">
+      <button type="button" data-tab="draw" class="active">Zeichnen</button>
+      <button type="button" data-tab="type">Tippen</button>
+      <button type="button" data-tab="upload">Bild hochladen</button>
+    </div>
+    <div class="tab" data-tab="draw">
+      <canvas id="sig-canvas" width="1200" height="400"></canvas>
+      <div class="row">
+        <span>Farbe</span>
+        <button type="button" class="swatch active" data-color="#111111" style="--c:#111"></button>
+        <button type="button" class="swatch" data-color="#1a3a9c" style="--c:#1a3a9c"></button>
+        <button type="button" class="swatch" data-color="#0b1f5c" style="--c:#0b1f5c"></button>
+        <span>Stift</span><input id="sig-width" type="range" min="2" max="12" value="5">
+        <div class="spacer"></div>
+        <button type="button" id="sig-clear" class="link">Löschen</button>
+      </div>
+    </div>
+    <div class="tab hidden" data-tab="type">
+      <input id="sig-name" type="text" placeholder="Dein Name" class="sig-name">
+      <div id="sig-fonts" class="sig-fonts"></div>
+    </div>
+    <div class="tab hidden" data-tab="upload">
+      <input id="sig-upload" type="file" accept="image/*">
+      <label class="check"><input type="checkbox" id="sig-transparent" checked> Weissen Hintergrund entfernen</label>
+      <div class="sig-upload-preview"><img id="sig-upload-img" alt=""></div>
+    </div>
+    <label class="check"><input type="checkbox" id="sig-remember" checked> Für nächstes Mal speichern (nur in diesem Browser)</label>
+    <div class="row end">
+      <button value="cancel">Abbrechen</button>
+      <button type="button" id="sig-use" class="primary">Einfügen</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast hidden"></div>
+<div id="busy" class="busy hidden"><div class="spinner"></div><span id="busy-text">Wird verarbeitet …</span></div>
+
+<script src="static/i18n.js"></script>
+<script src="static/tools.js"></script>
+<script src="static/app.js"></script>
+<script src="static/editor.js"></script>
+</body>
+</html>
