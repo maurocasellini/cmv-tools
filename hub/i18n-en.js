@@ -1,5 +1,6 @@
 /* English texts of the hub (source texts are German). */
 window.I18N_EN = {
+  'Golf Swing Analysis': 'Golf Swing Analysis', 'PDF · Scan · Sprache · Bild · Video · Übersetzen · QR · Golf': 'PDF · Scan · Voice · Image · Video · Translate · QR · Golf',
   'Open Source & Lizenzen': 'Open source & licenses', 'Quellcode': 'Source code', 'Open-Source-Lizenzen': 'Open-source licenses',
   'Alle CMV Tools sind Open Source. Der vollständige Quellcode steht öffentlich auf GitHub unter der Lizenz AGPL-3.0 – jede und jeder kann nachprüfen, dass nichts hochgeladen wird.':
     'All CMV Tools are open source. The complete source code is public on GitHub under the AGPL-3.0 license – anyone can verify that nothing is uploaded.',
@@ -47,6 +48,10 @@ window.I18N_EN = {
     'A blockchain you can touch: mine blocks, sign payments and watch every node check them – with a teaching mode and a compliance mode that traces money back to darknet markets, mixers and sanctions.',
   'Lern-Tools': 'Learning tools',
   'Interaktive Simulationen, um Technologie zu verstehen und zu unterrichten.': 'Interactive simulations to understand and teach technology.',
+  'Auf Einladung': 'By invitation', 'Invite only': 'Invite only',
+  'Trainings-Cockpit für Sportler und Coaches: Recovery, Workouts, Ernährung und Körperwerte aus Garmin, Strava und WHOOP – vereint zu einer Tagesform.': 'Training cockpit for athletes and coaches: recovery, workouts, nutrition and body metrics from Garmin, Strava and WHOOP – combined into one daily readiness score.',
+  'Schwungvideo rein, Analyse raus: Pose-Erkennung direkt auf dem Gerät, automatisch erkannte Schwungphasen, Biomechanik-Werte, Drills und ein optionaler KI-Coach.':
+    'Swing video in, analysis out: pose detection on your device, automatically detected swing phases, biomechanics, drills and an optional AI coach.',
   'Hinweise zu den Tools': 'About the tools',
   'Alle Tools laufen vollständig in deinem Browser. Dateien werden nur im Arbeitsspeicher deines Geräts verarbeitet und nie an einen Server gesendet. Eine Content Security Policy verbietet den Seiten technisch, Verbindungen zu anderen Servern aufzubauen.':
     'All tools run entirely in your browser. Files are only processed in your device’s memory and never sent to a server. A Content Security Policy technically prevents the pages from connecting to other servers.',
@@ -54,5 +59,9 @@ window.I18N_EN = {
     'The engines used are open source and served by the pages themselves – no third parties are loaded, there is no tracking and there are no cookies.',
   'Open Source + eigene Entwicklung · im Browser': 'Open source + own development · in your browser',
   'Jedes Tool läuft vollständig auf deinem Gerät. Unter der Haube arbeiten bewährte Open-Source-Engines als WebAssembly – kombiniert mit eigenen Funktionen, Bedienoberflächen und Optimierungen von CM Ventures. Deine Dateien verlassen nie dein Gerät.': 'Every tool runs entirely on your device. Under the hood, proven open-source engines run as WebAssembly – combined with our own features, interfaces and optimizations by CM Ventures. Your files never leave your device.',
+  'Persönlicher KI-Coach mit lokalem KI-Modell, für Sportler und Coaches: analysiert Trainings, Recovery, Schlaf und Ernährung aus Garmin, Apple Health, WHOOP, Strava, Oura & Co., erkennt Trends und Überlastung, gibt eine tägliche Empfehlung, plant Einheiten und schickt sie direkt auf die Uhr – Coaching im Chat inklusive.': 'Personal AI coach with a local AI model, for athletes and coaches: analyzes training, recovery, sleep and nutrition from Garmin, Apple Health, WHOOP, Strava, Oura & more, spots trends and overload, gives a daily recommendation, plans sessions and sends them straight to your watch – with coaching in the chat.',
+  'KI-Analysen · Lokales KI-Modell · Coaching': 'AI analysis · Local AI model · Coaching',
   'Vergleich: Ein Online-Dienst ist wie eine Hotline, der du deine Unterlagen vorliest. Diese Tools sind wie ein Taschenrechner, den du dir einmal holst – danach rechnest du selbst, und niemand hört zu. Die „Intelligenz“ dahinter ist eine Mischung: frei verfügbare Open-Source-Programme bekannter Organisationen wie Mozilla (Firefox), OpenAI oder Google – öffentlich einsehbar und von tausenden Fachleuten geprüft –, die wir zu fertigen Werkzeugen verbinden, um eigene Funktionen ergänzen und für Handy und Alltag optimieren.': 'Comparison: an online service is like a hotline you read your documents to. These tools are like a calculator you pick up once – after that you do the maths yourself, and nobody is listening. The “intelligence” behind them is a mix: freely available open-source software from well-known organizations such as Mozilla (Firefox), OpenAI or Google – publicly viewable and reviewed by thousands of experts – which we combine into finished tools, extend with our own features and optimize for phones and everyday use.',
+  'Eigene Entwicklungen für Spezialthemen': 'Own developments for specialist topics',
+  'Geschlossene Eigenentwicklungen von CM Ventures – nicht Open Source und nicht Teil des Kein-Upload-Prinzips oben, dafür mit voller KI-Power. Zugang auf Einladung.': 'Closed in-house developments by CM Ventures – not open source and not part of the no-upload principle above, but with full AI power. Access by invitation.',
 };

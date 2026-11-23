@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Train-Ray</title>
+  <rect width="64" height="64" rx="14" fill="#242b41"/>
+  <path d="M12 34h9l4-9 6 18 5-13 3 4h13" fill="none" stroke="#c47d45" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14 48h36" stroke="#f1f1ec" stroke-opacity=".35" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M14 48h22" stroke="#f1f1ec" stroke-width="2.4" stroke-linecap="round"/>
+</svg>

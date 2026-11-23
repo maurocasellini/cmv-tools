@@ -13,9 +13,12 @@ a.app:hover img { transform: translateY(-2px); }
 .app .go { position: absolute; right: 24px; top: 30px; font-family: var(--mono); font-style: normal; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); opacity: 0; transition: opacity .15s; }
 a.app:hover .go { opacity: 1; }
 @media (hover: none) { .app .go { opacity: 1; } }
+.app .badge { position: absolute; right: 24px; top: 30px; font-family: var(--mono); font-style: normal; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); border: 1px solid var(--line); padding: 3px 8px; }
 .soon .app img { filter: saturate(.75); opacity: .8; }
 .soon .app strong { color: var(--muted); }
 @media (max-width: 640px) { .app { padding: 22px 18px 18px; } .apps { grid-template-columns: 1fr; } }
+.internal .app .badge { color: var(--accent); border-color: var(--accent); }
 .cat-note { margin: -6px 0 14px; color: var(--muted); font-size: 14.5px; }
 
 /* Licenses page */
@@ -28,3 +31,4 @@ a.app:hover .go { opacity: 1; }
 .lic td:first-child a { color: var(--text); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
 .lic td:first-child a:hover { color: var(--accent); }
 .lic tr:last-child td { border-bottom: none; }
+a.app .badge { opacity: 1; }
